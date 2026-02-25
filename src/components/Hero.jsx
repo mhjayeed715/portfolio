@@ -94,7 +94,6 @@ const heroStats = [
 const roles = [
   'Full-Stack Developer',
   'React Specialist',
-  'AI-Assisted Engineer',
   'Mobile App Developer',
 ]
 
