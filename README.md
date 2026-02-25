@@ -1,14 +1,28 @@
 # S. M. Mehrab Hossain Jayeed — Portfolio
 
-A modern, dark-mode developer portfolio built with React, Vite, Tailwind CSS v4, Framer Motion, and Lucide icons.
+A modern, responsive developer portfolio with light/dark theme, smooth animations, and a working contact form.
+
+**Live:** [portfolio-mhjayeed715.vercel.app](https://portfolio-mhjayeed715.vercel.app)
 
 ## Tech Stack
 
-- **React 19** + **Vite 7** — blazing fast dev & build
-- **Tailwind CSS v4** — utility-first styling with custom theme
-- **Framer Motion** — scroll-triggered animations, page transitions
-- **React Scroll** — smooth section navigation with active link detection
-- **Lucide React** — beautiful, consistent icons
+| Technology | Purpose |
+|---|---|
+| **React 19** + **Vite 7** | Fast development & optimized builds |
+| **Tailwind CSS v4** | Utility-first styling with CSS-first config |
+| **Framer Motion** | Scroll-triggered & interactive animations |
+| **EmailJS** | Contact form delivery without a backend |
+| **Lucide React** | Consistent, modern icon set |
+
+## Features
+
+- **Light / Dark theme** — toggle with smooth transitions, persisted in localStorage
+- **Animated Hero** — typewriter effect, floating particles, orbiting tech icons, parallax mouse tracking
+- **10 sections** — Hero, About, Services, Skills, Projects, Philosophy, Education, Contact, Footer, Scroll-to-Top
+- **Technical Proficiency** — animated progress bars for core skills
+- **Working contact form** — powered by EmailJS, messages delivered directly to inbox
+- **Responsive** — fully mobile-friendly with collapsible navbar
+- **Accessible** — semantic HTML, ARIA labels, keyboard-navigable
 
 ## Getting Started
 
@@ -31,42 +45,33 @@ npm run preview
 ```
 portfolio-site/
 ├── public/
-│   ├── profile.png        # Profile photo
-│   ├── resume.pdf         # Downloadable CV
-│   └── favicon.svg        # Site favicon
+│   ├── profile.png          # Profile photo
+│   ├── resume.pdf           # Downloadable CV
+│   ├── favicon.svg          # Site favicon
+│   ├── icons/               # Tech stack SVG icons
+│   ├── projects/            # Project screenshots
+│   └── education/           # Education logos
 ├── src/
 │   ├── components/
-│   │   ├── Navbar.jsx     # Fixed transparent navbar
-│   │   ├── Hero.jsx       # Hero with typing animation
-│   │   ├── About.jsx      # About me section
-│   │   ├── Skills.jsx     # Skills with tab switching
-│   │   ├── Projects.jsx   # Project cards + modal
-│   │   ├── Journey.jsx    # Timeline (education/certs/activities)
-│   │   ├── Languages.jsx  # Language proficiency
-│   │   ├── Contact.jsx    # Contact form + info
-│   │   ├── Footer.jsx     # Footer
-│   │   └── ScrollToTop.jsx
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css          # Tailwind imports + custom styles
+│   │   ├── Navbar.jsx       # Fixed frosted-glass navbar
+│   │   ├── Hero.jsx         # Animated hero with particles & parallax
+│   │   ├── About.jsx        # About me section
+│   │   ├── Services.jsx     # Service cards (6 services)
+│   │   ├── Skills.jsx       # Tech icons grid + proficiency bars
+│   │   ├── Projects.jsx     # Project showcase cards
+│   │   ├── Philosophy.jsx   # Development philosophy
+│   │   ├── Education.jsx    # Education timeline
+│   │   ├── Contact.jsx      # EmailJS contact form + info cards
+│   │   ├── Footer.jsx       # Multi-column footer
+│   │   ├── ThemeToggle.jsx  # Light/dark mode toggle
+│   │   └── ScrollToTop.jsx  # Scroll-to-top button
+│   ├── App.jsx              # Root layout
+│   ├── main.jsx             # Entry point
+│   └── index.css            # Tailwind config + theme variables
 ├── index.html
 ├── vite.config.js
-├── package.json
-└── README.md
+└── package.json
 ```
-
-## Features
-
-- Dark mode only — premium deep navy + electric indigo + neon cyan
-- Typing animation in Hero
-- Scroll-triggered reveal animations
-- Project modal with full details
-- Copy email to clipboard
-- Download CV button
-- Active navbar link highlighting
-- Fully responsive (mobile-first)
-- Particle background in Hero
-- Section gradient dividers
 
 ## License
 
