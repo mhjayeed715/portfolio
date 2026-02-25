@@ -46,10 +46,9 @@ export default function About() {
             {/* Right – metrics + highlights */}
             <motion.div variants={fadeUp} className="space-y-8">
               {/* Metrics */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 {[
                   { value: '5+', label: 'Projects Shipped' },
-                  { value: '3.93', label: 'CGPA / 4.00' },
                   { value: '20+', label: 'Tech Skills' },
                 ].map((m) => (
                   <div key={m.label} className="p-4 rounded-xl border border-border bg-card text-center">
