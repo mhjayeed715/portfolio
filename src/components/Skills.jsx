@@ -25,6 +25,9 @@ const categories = [
       { name: 'Tailwind CSS', icon: '/icons/tailwindcss-original.svg' },
       { name: 'Flutter', icon: '/icons/flutter-original.svg' },
       { name: 'Vite', icon: '/icons/vite-original.svg' },
+      { name: 'Flask', icon: '/icons/flask-original.svg' },
+      { name: 'Jinja', icon: '/icons/jinja-original.svg' },
+      { name: 'Socket.IO', icon: '/icons/socketio-original.svg' },
     ],
   },
   {
@@ -33,6 +36,7 @@ const categories = [
       { name: 'PostgreSQL', icon: '/icons/postgresql-original.svg' },
       { name: 'MongoDB', icon: '/icons/mongodb-original.svg' },
       { name: 'MySQL', icon: '/icons/mysql-original.svg' },
+      { name: 'SQLite', icon: '/icons/sqlite-original.svg' },
       { name: 'Supabase', icon: '/icons/supabase-original.svg' },
     ],
   },

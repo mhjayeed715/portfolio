@@ -80,7 +80,7 @@ export default function Footer() {
             Copyright &copy; {year} S. M. Mehrab Hossain Jayeed. All rights reserved.
           </p>
           <p className="text-xs text-muted-foreground">
-            Built with React + Tailwind CSS
+            Built with ❤️ by Jayeed
           </p>
         </div>
       </div>

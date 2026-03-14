@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Globe, ExternalLink } from 'lucide-react'
 
@@ -26,6 +27,24 @@ const projects = [
     featured: true,
   },
   {
+    title: 'GigCampus',
+    subtitle: 'Campus-only Micro-Gig Marketplace',
+    description:
+      'A platform for students to find trustworthy peers for quick, affordable tasks. Includes ID verification, real-time chat, order tracking, and a ghosting detection system.',
+    highlights: ['Real-time Chat', 'Order Tracking', 'Ghosting Detection'],
+    image: '/projects/GigCampus.png',
+    tech: [
+      { name: 'Python', icon: '/icons/python-original.svg' },
+      { name: 'Flask', icon: '/icons/flask-original.svg' },
+      { name: 'SQLite', icon: '/icons/sqlite-original.svg' },
+      { name: 'Jinja', icon: '/icons/jinja-original.svg' },
+      { name: 'Socket.IO', icon: '/icons/socketio-original.svg' },
+    ],
+    github: 'https://github.com/mhjayeed715/GigCampus',
+    live: 'https://gigcampus-7er7.onrender.com/',
+    featured: false,
+  },  
+  {
     title: 'SkillVoyage',
     subtitle: 'Learning Goal Tracker',
     description:
@@ -43,6 +62,20 @@ const projects = [
     featured: true,
   },
   {
+    title: 'UniShareSyncFX',
+    subtitle: 'Desktop Collaboration Tool',
+    description:
+      'JavaFX desktop application facilitating university resource sharing and collaboration through role-specific dashboards, real-time communication, and project tracking with MySQL integration.',
+    highlights: ['Role Dashboards', 'Real-time Chat', 'MySQL Integration'],
+    image: '/projects/unisharesyncfx.png',
+    tech: [
+      { name: 'Java', icon: '/icons/java-original.svg' },
+      { name: 'MySQL', icon: '/icons/mysql-original.svg' },
+    ],
+    github: 'https://github.com/mhjayeed715/UniShareSyncFX',
+    featured: false,
+  },
+  {
     title: 'Servyn',
     subtitle: 'Local Service Booking App',
     description:
@@ -56,20 +89,6 @@ const projects = [
     ],
     github: 'https://github.com/mhjayeed715/servyn',
     featured: true,
-  },
-  {
-    title: 'UniShareSyncFX',
-    subtitle: 'Desktop Collaboration Tool',
-    description:
-      'JavaFX desktop application facilitating university resource sharing and collaboration through role-specific dashboards, real-time communication, and project tracking with MySQL integration.',
-    highlights: ['Role Dashboards', 'Real-time Chat', 'MySQL Integration'],
-    image: '/projects/unisharesyncfx.png',
-    tech: [
-      { name: 'Java', icon: '/icons/java-original.svg' },
-      { name: 'MySQL', icon: '/icons/mysql-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/UniShareSyncFX',
-    featured: false,
   },
   {
     title: 'AI Drainage Optimizer',
@@ -179,6 +198,9 @@ function ProjectCard({ project, index }) {
 }
 
 export default function Projects() {
+  const [showAll, setShowAll] = useState(false)
+  const displayedProjects = showAll ? projects : projects.slice(0, 4)
+
   return (
     <section id="projects" className="py-24 section-alt">
       <div className="max-w-6xl mx-auto px-6">
@@ -204,10 +226,27 @@ export default function Projects() {
 
         {/* Projects list */}
         <div className="space-y-20">
-          {projects.map((project, i) => (
+          {displayedProjects.map((project, i) => (
             <ProjectCard key={project.title} project={project} index={i} />
           ))}
         </div>
+
+        {/* See More Button */}
+        {projects.length > 4 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-16 flex justify-center"
+          >
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="px-8 py-3 rounded-xl border border-primary/30 text-primary font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+            >
+              {showAll ? 'Show Less' : 'See More Projects'}
+            </button>
+          </motion.div>
+        )}
       </div>
     </section>
   )
