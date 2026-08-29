@@ -96,16 +96,22 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="fixed top-4 sm:top-5 inset-x-0 z-50 pointer-events-none"
     >
-      {/* Single Flex Container wrapping both Navbar Pill and Theme Toggle */}
-      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-3 pointer-events-auto">
+      {/* Symmetrical 3-Column Flex Container */}
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between pointer-events-none">
         
-        {/* Left / Center — Floating Capsule Navbar */}
+        {/* 1. Left Symmetrical Balance Spacer — Exactly 40x40px */}
+        <div
+          className="w-10 h-10 min-w-[40px] min-h-[40px] max-w-[40px] max-h-[40px] shrink-0 opacity-0 pointer-events-none"
+          aria-hidden="true"
+        />
+
+        {/* 2. Center Capsule Navbar — True Mathematical Center */}
         <motion.nav
           layout
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           transition={{ type: 'spring', stiffness: 220, damping: 28, mass: 0.8 }}
-          className="flex items-center gap-1.5 sm:gap-2 py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-full liquid-glass transition-all duration-300 shadow-xl"
+          className="pointer-events-auto flex items-center gap-1.5 sm:gap-2 py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-full liquid-glass transition-all duration-300 shadow-xl"
         >
           {/* Round Profile Picture + Name Pill */}
           <a
@@ -187,8 +193,8 @@ export default function Navbar() {
           </button>
         </motion.nav>
 
-        {/* Right — Fixed 40x40 Theme Toggle Button */}
-        <div className="shrink-0 flex items-center justify-center">
+        {/* 3. Right Theme Toggle Slot — Exactly 40x40px */}
+        <div className="w-10 h-10 min-w-[40px] min-h-[40px] max-w-[40px] max-h-[40px] shrink-0 flex items-center justify-center pointer-events-auto">
           <ThemeToggle />
         </div>
 
