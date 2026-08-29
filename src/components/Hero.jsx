@@ -133,16 +133,16 @@ export default function Hero() {
               Building <span className="gradient-text">Scalable Software</span> & Mobile MVPs.
             </motion.h1>
 
-            {/* Typewriter role */}
+            {/* Typewriter role — Fixed height container to completely prevent layout shift */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex items-center gap-2.5 mb-5 font-mono text-base sm:text-lg text-foreground/80 font-medium"
+              className="flex items-center gap-2.5 mb-5 font-mono text-sm sm:text-base md:text-lg text-foreground/85 font-medium h-8 sm:h-9"
             >
               <Terminal size={18} className="shrink-0 text-muted-foreground" />
-              <span>{typedRole}</span>
-              <span className="inline-block w-2 h-4 bg-foreground animate-pulse" />
+              <span className="whitespace-nowrap overflow-visible">{typedRole}</span>
+              <span className="inline-block w-2 h-4 sm:h-5 bg-foreground animate-pulse shrink-0" />
             </motion.div>
 
             {/* Subtext description */}
