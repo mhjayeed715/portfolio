@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ExternalLink, Trophy } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ExternalLink, Layers, Smartphone, Globe, Cpu, ChevronDown, ChevronUp } from 'lucide-react'
 
 const GitHubIcon = ({ className }) => (
   <svg viewBox="0 0 24 24" className={className} fill="currentColor">
@@ -8,14 +8,23 @@ const GitHubIcon = ({ className }) => (
   </svg>
 )
 
+const categories = [
+  { id: 'all', label: 'All Projects', count: 8, icon: Layers },
+  { id: 'mobile', label: 'Mobile Apps', count: 2, icon: Smartphone },
+  { id: 'web', label: 'Full-Stack Web', count: 4, icon: Globe },
+  { id: 'ai', label: 'AI & Systems', count: 2, icon: Cpu },
+]
+
 const projects = [
   {
+    id: 1,
     title: 'UniShareSync Mobile App',
-    subtitle: 'Centralized University Collaboration & Campus Management',
-    award: '2nd Place — Software Project Showcase 2026 (Inter-Department)',
+    category: 'mobile',
+    subtitle: 'Cross-Platform Campus Ecosystem',
+    award: '🏆 2nd Place Winner — Software Project Showcase 2026',
     description:
-      'Cross-platform mobile application centralizing university academic workflows, student collaboration, and campus management into a unified ecosystem. Built with Flutter and Supabase, featuring an AI Campus Assistant with Groq RAG document querying, real-time collaborative whiteboards & Kanban boards with multi-user presence, campus bus transit tracking via OpenStreetMap, CampusShare peer-to-peer item sharing with digital agreements, and QR event check-ins.',
-    highlights: ['Flutter & Supabase', 'AI Campus Assistant (RAG)', 'Real-time Whiteboard & Kanban', 'FCM Push Notifications', 'CampusShare P2P'],
+      'Unified university mobile ecosystem built with Flutter and Supabase. Features an AI Campus Assistant with Groq RAG querying, real-time collaborative whiteboards, bus transit tracking via OpenStreetMap, and QR event check-ins.',
+    highlights: ['Flutter & Supabase', 'AI RAG Assistant', 'Real-time Whiteboard', 'OpenStreetMap Transit', 'CampusShare P2P'],
     image: '/projects/unisharesync_mobile.png',
     tech: [
       { name: 'Flutter', icon: '/icons/flutter-original.svg' },
@@ -25,14 +34,16 @@ const projects = [
     ],
     github: 'https://github.com/mhjayeed715/UniShareSync-Mobile-App',
     live: 'https://unisharesync.vercel.app/',
-    featured: true,
+    flagship: true,
   },
   {
+    id: 2,
     title: 'Focusnyx',
-    subtitle: 'The Ultimate Student Life OS & Cognitive Shield',
+    category: 'web',
+    subtitle: 'Student Life OS & Cognitive Shield',
     description:
-      'Full-stack productivity operating system and digital cognitive shield tailored for university students and neurodivergent learners. Integrates a Next.js 14 web app, Chrome Manifest V3 extension for browser distraction blocking, and a Python Win32 companion for system-level shortcut/window focus enforcement. Includes ADHD & Standard interaction modes, Smart Academic Forge CGPA momentum calculator, AI Behavioral Coach, and bilingual voice notes.',
-    highlights: ['Next.js 14 & Supabase', 'Chrome MV3 Extension', 'Win32 System Hooks', 'ADHD & Standard Modes', 'AI Behavioral Coach'],
+      'Full-stack productivity operating system and cognitive shield for neurodivergent learners. Combines Next.js 14, Chrome MV3 distraction blocker, and Win32 focus enforcement.',
+    highlights: ['Next.js 14 & Supabase', 'Chrome MV3 Extension', 'Win32 System Hooks', 'AI Behavioral Coach'],
     image: '/projects/focusnyx.png',
     tech: [
       { name: 'React', icon: '/icons/react-original.svg' },
@@ -43,32 +54,33 @@ const projects = [
     ],
     github: 'https://github.com/mhjayeed715/Focusnyx',
     live: 'https://focusnyx.vercel.app/',
-    featured: true,
   },
   {
+    id: 3,
     title: 'GigCampus',
-    subtitle: 'Campus-only Micro-Gig Marketplace',
+    category: 'web',
+    subtitle: 'Campus Micro-Task Marketplace',
     description:
-      'A peer-to-peer campus task marketplace built as a CS50x final project. Enables university students to find trustworthy peers for quick, affordable tasks. Features university student ID verification, real-time messaging powered by Socket.IO, live order tracking, and an automated ghosting detection system.',
-    highlights: ['CS50x Final Project', 'Real-time Chat', 'Order Tracking', 'Ghosting Detection'],
+      'Peer-to-peer campus task platform with verified student ID authentication, real-time Socket.IO chat, order lifecycle tracking, and automated ghosting detection.',
+    highlights: ['CS50x Capstone', 'Socket.IO Chat', 'Order Tracking', 'Ghosting Shield'],
     image: '/projects/GigCampus.png',
     tech: [
       { name: 'Python', icon: '/icons/python-original.svg' },
       { name: 'Flask', icon: '/icons/flask-original.svg' },
       { name: 'SQLite', icon: '/icons/sqlite-original.svg' },
-      { name: 'Jinja', icon: '/icons/jinja-original.svg' },
       { name: 'Socket.IO', icon: '/icons/socketio-original.svg' },
     ],
     github: 'https://github.com/mhjayeed715/GigCampus',
     live: 'https://gigcampus-7er7.onrender.com/',
-    featured: true,
   },
   {
+    id: 4,
     title: 'UniShareSync Web App',
-    subtitle: 'University Resource Sharing Web Platform',
+    category: 'web',
+    subtitle: 'Academic Resource Platform',
     description:
-      'Full-stack academic platform enabling university students, faculty, and admins to share academic resources, collaborate on projects, manage events, and communicate via real-time notifications with secure email OTP login and role-based access control.',
-    highlights: ['Email OTP Auth', 'RBAC', 'Real-time Notifications', 'RESTful API'],
+      'Full-stack academic portal for resource sharing, event scheduling, and department collaboration with email OTP security and role-based access control.',
+    highlights: ['Email OTP Auth', 'RBAC Security', 'Real-time Sync', 'RESTful API'],
     image: '/projects/unisharesync.png',
     tech: [
       { name: 'React', icon: '/icons/react-original.svg' },
@@ -78,14 +90,31 @@ const projects = [
     ],
     github: 'https://github.com/mhjayeed715/UniShareSync',
     live: 'https://unisharesyncweb.vercel.app/',
-    featured: true,
   },
   {
-    title: 'SkillVoyage',
-    subtitle: 'Learning Goal Tracker',
+    id: 5,
+    title: 'Servyn',
+    category: 'mobile',
+    subtitle: 'On-Demand Local Service Booking',
     description:
-      'MERN stack platform enabling users to set learning goals, track progress through interactive dashboards, and receive personalized skill development recommendations with secure authentication and role-based access.',
-    highlights: ['Interactive Dashboards', 'JWT Auth', 'Personalized Recommendations'],
+      'Flutter-based mobile application connecting verified service providers with local customers via phone OTP verification and automated SMS notifications.',
+    highlights: ['Phone OTP Auth', 'SMS Alerts', 'Provider Dashboard'],
+    image: '/projects/servyn.png',
+    tech: [
+      { name: 'Flutter', icon: '/icons/flutter-original.svg' },
+      { name: 'Dart', icon: '/icons/dart-original.svg' },
+      { name: 'Supabase', icon: '/icons/supabase-original.svg' },
+    ],
+    github: 'https://github.com/mhjayeed715/servyn',
+  },
+  {
+    id: 6,
+    title: 'SkillVoyage',
+    category: 'web',
+    subtitle: 'Interactive Skill Roadmap & Goal Tracker',
+    description:
+      'MERN stack application enabling learners to set progressive milestones, track metrics through interactive dashboards, and receive curated skill recommendations.',
+    highlights: ['Interactive Dashboards', 'JWT Sessions', 'Custom Roadmaps'],
     image: '/projects/skillvoyage.png',
     tech: [
       { name: 'React', icon: '/icons/react-original.svg' },
@@ -95,202 +124,297 @@ const projects = [
     ],
     github: 'https://github.com/mhjayeed715/skillvoyage',
     live: 'https://skillvoyage-frontend.vercel.app/',
-    featured: false,
   },
   {
-    title: 'Servyn',
-    subtitle: 'Local Service Booking App',
+    id: 7,
+    title: 'AI Drainage Optimizer',
+    category: 'ai',
+    subtitle: 'Predictive Urban Flooding Analytics',
     description:
-      'Flutter-based mobile app for reliable local service booking in Bangladesh with role-based access, phone OTP authentication via Supabase, and SMS notifications for seamless provider-customer interactions.',
-    highlights: ['Phone OTP Auth', 'SMS Notifications', 'Role-Based Access'],
-    image: '/projects/servyn.png',
+      'Machine learning model analyzing precipitation and urban terrain to predict waterlogging hotspots and assist municipal drainage planning.',
+    highlights: ['ML Predictive Pipeline', 'Terrain Modeling', 'Data Analytics'],
+    image: '/projects/ai-drainage.png',
     tech: [
-      { name: 'Flutter', icon: '/icons/flutter-original.svg' },
-      { name: 'Dart', icon: '/icons/dart-original.svg' },
-      { name: 'Supabase', icon: '/icons/supabase-original.svg' },
+      { name: 'Python', icon: '/icons/python-original.svg' },
     ],
-    github: 'https://github.com/mhjayeed715/servyn',
-    featured: false,
+    github: 'https://github.com/mhjayeed715/AI-Powered-Smart-Waterlogging-and-Drainage-Optimizer',
   },
   {
+    id: 8,
     title: 'UniShareSyncFX',
-    subtitle: 'Desktop Collaboration Tool',
+    category: 'ai',
+    subtitle: 'Desktop Resource Client with Offline Cache',
     description:
-      'JavaFX desktop application facilitating university resource sharing and collaboration through role-specific dashboards, real-time communication, and project tracking with MySQL integration.',
-    highlights: ['Role Dashboards', 'Real-time Chat', 'MySQL Integration'],
+      'JavaFX desktop application with MySQL replication, local cache synchronization, and department communication tools.',
+    highlights: ['JavaFX Desktop UI', 'MySQL Replication', 'Offline Cache'],
     image: '/projects/unisharesyncfx.png',
     tech: [
       { name: 'Java', icon: '/icons/java-original.svg' },
       { name: 'MySQL', icon: '/icons/mysql-original.svg' },
     ],
     github: 'https://github.com/mhjayeed715/UniShareSyncFX',
-    featured: false,
-  },
-  {
-    title: 'AI Drainage Optimizer',
-    subtitle: 'AI-Powered Urban Water Management',
-    description:
-      'AI-powered system to optimize waterlogging and drainage, enhancing urban water management and reducing flood risks through predictive analytics.',
-    highlights: ['AI/ML Pipeline', 'Predictive Analytics', 'Urban Planning'],
-    image: '/projects/ai-drainage.png',
-    tech: [
-      { name: 'Python', icon: '/icons/python-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/AI-Powered-Smart-Waterlogging-and-Drainage-Optimizer',
-    featured: false,
   },
 ]
 
-function ProjectCard({ project, index }) {
-  const isEven = index % 2 === 0
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className={`group grid lg:grid-cols-2 gap-8 items-center ${!isEven ? 'lg:direction-rtl' : ''}`}
-    >
-      {/* Image */}
-      <div className={`relative overflow-hidden rounded-xl border border-border shadow-sm bg-card ${!isEven ? 'lg:order-2' : ''}`}>
-        <div className="aspect-video bg-secondary/30 relative overflow-hidden">
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            loading={index < 2 ? 'eager' : 'lazy'}
-          />
-        </div>
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-      </div>
-
-      {/* Info */}
-      <div className={`space-y-4 ${!isEven ? 'lg:order-1 lg:text-right' : ''}`}>
-        {/* Award Banner if present */}
-        {project.award && (
-          <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-semibold ${!isEven ? 'lg:ml-auto' : ''}`}>
-            <Trophy size={13} className="shrink-0" />
-            <span>{project.award}</span>
-          </div>
-        )}
-
-        <div>
-          <p className="text-sm font-semibold text-primary mb-1">{project.subtitle}</p>
-          <h3 className="font-display text-2xl font-bold text-foreground">{project.title}</h3>
-        </div>
-
-        <p className="text-muted-foreground text-sm leading-relaxed">{project.description}</p>
-
-        {/* Highlights */}
-        <div className={`flex flex-wrap gap-2 ${!isEven ? 'lg:justify-end' : ''}`}>
-          {project.highlights.map((h) => (
-            <span
-              key={h}
-              className="text-[11px] font-medium px-2.5 py-1 rounded-md bg-primary/10 text-primary border border-primary/20"
-            >
-              {h}
-            </span>
-          ))}
-        </div>
-
-        {/* Tech icons */}
-        <div className={`flex items-center gap-3 pt-1 ${!isEven ? 'lg:justify-end' : ''}`}>
-          {project.tech.map((t) => (
-            <div key={t.name} className="group/icon relative">
-              <img
-                src={t.icon}
-                alt={t.name}
-                className="w-6 h-6 object-contain opacity-60 hover:opacity-100 transition-opacity"
-              />
-              <span className="absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] bg-card border border-border px-1.5 py-0.5 rounded text-foreground opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-sm">
-                {t.name}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Links */}
-        <div className={`flex gap-3 pt-2 ${!isEven ? 'lg:justify-end' : ''}`}>
-          {project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-border hover:border-primary/30 hover:bg-secondary/50 transition-colors"
-            >
-              <GitHubIcon className="w-4 h-4" />
-              Code
-            </a>
-          )}
-          {project.live && (
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              <ExternalLink size={14} />
-              Live Demo
-            </a>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  )
-}
-
 export default function Projects() {
-  const [showAll, setShowAll] = useState(false)
-  const displayedProjects = showAll ? projects : projects.slice(0, 4)
+  const [activeCategory, setActiveCategory] = useState('all')
+  const [expanded, setExpanded] = useState(false)
+
+  // Filter logic
+  const filteredList = activeCategory === 'all'
+    ? projects
+    : projects.filter((p) => p.category === activeCategory)
+
+  // If in 'all' view and not expanded, show top 4 projects (1 flagship + 3 secondary)
+  const displayedProjects = (activeCategory === 'all' && !expanded)
+    ? filteredList.slice(0, 4)
+    : filteredList
+
+  const flagshipProject = projects[0]
 
   return (
-    <section id="projects" className="py-24 section-alt">
+    <section id="projects" className="py-24">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-16"
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-primary" />
-            <span className="text-sm font-semibold text-primary uppercase tracking-widest">Projects</span>
-          </div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
-            Featured <span className="gradient-text">Work</span>
-          </h2>
-          <p className="text-muted-foreground max-w-xl">
-            Real-world applications with a focus on clean architecture, security, and scalability.
-          </p>
-        </motion.div>
+        
+        {/* Header & Filter Row */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex items-center gap-2 text-muted-foreground font-mono text-xs uppercase tracking-widest mb-3">
+              <span className="w-6 h-[1.5px] bg-foreground" />
+              <span>Selected Work</span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+              Featured <span className="gradient-text">Software & MVPs</span>
+            </h2>
+          </motion.div>
 
-        {/* Projects list */}
-        <div className="space-y-20">
-          {displayedProjects.map((project, i) => (
-            <ProjectCard key={project.title} project={project} index={i} />
-          ))}
+          {/* Filter Pills */}
+          <div className="flex flex-wrap items-center gap-1 p-1 rounded-2xl glass-panel border border-border/80">
+            {categories.map((cat) => {
+              const Icon = cat.icon
+              const isActive = activeCategory === cat.id
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    setActiveCategory(cat.id)
+                    setExpanded(false)
+                  }}
+                  className={`relative flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-mono font-medium rounded-xl transition-all duration-200 cursor-pointer ${
+                    isActive
+                      ? 'text-background font-semibold'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeFilterPill"
+                      className="absolute inset-0 bg-foreground rounded-xl shadow-xs"
+                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <Icon size={13} className="relative z-10" />
+                  <span className="relative z-10">{cat.label}</span>
+                </button>
+              )
+            })}
+          </div>
         </div>
 
-        {/* See More Button */}
-        {projects.length > 4 && (
+        {/* 1. Flagship Spotlight Card (when in 'all' or 'mobile' tab) */}
+        {(activeCategory === 'all' || activeCategory === 'mobile') && (
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-16 flex justify-center"
+            transition={{ duration: 0.5 }}
+            className="mb-10 rounded-3xl glass-panel glow-card border border-border/80 p-6 sm:p-8 overflow-hidden relative"
           >
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="px-8 py-3 rounded-xl border border-primary/30 text-primary font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-300 cursor-pointer"
-            >
-              {showAll ? 'Show Less' : 'See More Projects'}
-            </button>
+            <div className="grid lg:grid-cols-12 gap-8 items-center">
+              {/* Image Preview */}
+              <div className="lg:col-span-6 relative rounded-2xl overflow-hidden bg-secondary border border-border/80 shadow-md aspect-video">
+                <img
+                  src={flagshipProject.image}
+                  alt={flagshipProject.title}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-foreground text-background text-xs font-semibold shadow-md">
+                  <span>{flagshipProject.award}</span>
+                </div>
+              </div>
+
+              {/* Spotlight Content */}
+              <div className="lg:col-span-6 space-y-4">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-secondary text-muted-foreground text-[11px] font-mono font-medium border border-border/60">
+                  <span>FLAGSHIP SHOWCASE</span>
+                </div>
+                <h3 className="font-display text-2xl sm:text-3xl font-bold text-foreground">
+                  {flagshipProject.title}
+                </h3>
+                <p className="text-xs font-mono text-muted-foreground">{flagshipProject.subtitle}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {flagshipProject.description}
+                </p>
+
+                {/* Innovation highlights */}
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {flagshipProject.highlights.map((h) => (
+                    <span
+                      key={h}
+                      className="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-secondary text-foreground/90 border border-border/60"
+                    >
+                      {h}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Tech icons and Action buttons */}
+                <div className="pt-4 border-t border-border/50 flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-2.5">
+                    {flagshipProject.tech.map((t) => (
+                      <img key={t.name} src={t.icon} alt={t.name} className="w-5 h-5 object-contain" title={t.name} />
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    {flagshipProject.github && (
+                      <a
+                        href={flagshipProject.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-border bg-card text-xs font-medium text-foreground hover:bg-secondary transition-colors"
+                      >
+                        <GitHubIcon className="w-3.5 h-3.5" />
+                        <span>Source</span>
+                      </a>
+                    )}
+                    {flagshipProject.live && (
+                      <a
+                        href={flagshipProject.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-xs font-semibold hover:opacity-90 transition-opacity shadow-xs"
+                      >
+                        <span>Live Demo</span>
+                        <ExternalLink size={13} />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
         )}
+
+        {/* 2. Secondary Projects Grid */}
+        <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <AnimatePresence>
+            {displayedProjects
+              .filter((p) => activeCategory !== 'all' && activeCategory !== 'mobile' ? true : p.id !== 1)
+              .map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.35, delay: index * 0.04 }}
+                  className="group flex flex-col justify-between rounded-3xl glass-panel glow-card overflow-hidden border border-border/70 hover:border-foreground/30"
+                >
+                  <div>
+                    {/* Image Preview */}
+                    <div className="relative aspect-video w-full overflow-hidden bg-secondary border-b border-border/60">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="p-5 space-y-2.5">
+                      <p className="text-[11px] font-mono text-muted-foreground font-medium uppercase tracking-wider">
+                        {project.subtitle}
+                      </p>
+
+                      <h4 className="font-display text-lg font-bold text-foreground group-hover:opacity-80 transition-opacity">
+                        {project.title}
+                      </h4>
+
+                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
+                        {project.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-1 pt-1.5">
+                        {project.highlights.slice(0, 3).map((h) => (
+                          <span
+                            key={h}
+                            className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-secondary text-foreground/80 border border-border/50"
+                          >
+                            {h}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="p-5 pt-0 flex items-center justify-between gap-3 border-t border-border/40 mt-3">
+                    <div className="flex items-center gap-2">
+                      {project.tech.slice(0, 4).map((t) => (
+                        <img key={t.name} src={t.icon} alt={t.name} className="w-4 h-4 object-contain opacity-70" title={t.name} />
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {project.github && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-xl border border-border bg-card text-muted-foreground hover:text-foreground transition-colors"
+                          aria-label={`Source code for ${project.title}`}
+                        >
+                          <GitHubIcon className="w-3.5 h-3.5" />
+                        </a>
+                      )}
+                      {project.live && (
+                        <a
+                          href={project.live}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-foreground text-background text-xs font-medium hover:opacity-90 transition-opacity"
+                        >
+                          <span>Demo</span>
+                          <ExternalLink size={11} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* 3. Progressive Disclosure Toggle (Only in 'All' tab) */}
+        {activeCategory === 'all' && (
+          <div className="mt-12 flex justify-center">
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl glass-panel border border-border/80 hover:border-foreground/30 text-xs font-mono font-semibold text-foreground transition-all duration-200 cursor-pointer shadow-xs"
+            >
+              <span>{expanded ? 'Show Curated Highlights' : 'Explore All 8 Projects'}</span>
+              {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            </button>
+          </div>
+        )}
+
       </div>
     </section>
   )

@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
-import { ArrowDown, ExternalLink, MapPin, FileDown, Sparkles } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, FileDown, Terminal } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 
 const GitHubIcon = ({ className }) => (
@@ -23,14 +23,17 @@ function AnimatedCounter({ target, duration = 2 }) {
   useEffect(() => {
     const controls = animate(count, target, { duration, ease: 'easeOut' })
     const unsub = rounded.on('change', (v) => setDisplay(v))
-    return () => { controls.stop(); unsub() }
-  }, [target])
+    return () => {
+      controls.stop()
+      unsub()
+    }
+  }, [target, count, duration, rounded])
 
   return <span>{display}</span>
 }
 
 /* Typewriter hook */
-function useTypewriter(texts, typingSpeed = 80, deletingSpeed = 50, pauseTime = 2000) {
+function useTypewriter(texts, typingSpeed = 70, deletingSpeed = 40, pauseTime = 2000) {
   const [displayed, setDisplayed] = useState('')
   const [textIndex, setTextIndex] = useState(0)
   const [charIndex, setCharIndex] = useState(0)
@@ -58,31 +61,9 @@ function useTypewriter(texts, typingSpeed = 80, deletingSpeed = 50, pauseTime = 
     }
 
     return () => clearTimeout(timeout)
-  }, [charIndex, isDeleting, textIndex, texts])
+  }, [charIndex, isDeleting, textIndex, texts, typingSpeed, deletingSpeed, pauseTime])
 
   return displayed
-}
-
-/* Floating particle component */
-function FloatingParticle({ delay, x, y, size, duration }) {
-  return (
-    <motion.div
-      className="absolute rounded-full bg-primary/20 pointer-events-none"
-      style={{ width: size, height: size, left: x, top: y }}
-      animate={{
-        y: [0, -30, 0, 20, 0],
-        x: [0, 15, -10, 5, 0],
-        opacity: [0.2, 0.6, 0.3, 0.5, 0.2],
-        scale: [1, 1.2, 0.9, 1.1, 1],
-      }}
-      transition={{
-        duration,
-        repeat: Infinity,
-        delay,
-        ease: 'easeInOut',
-      }}
-    />
-  )
 }
 
 const heroStats = [
@@ -93,384 +74,230 @@ const heroStats = [
 
 const roles = [
   'Full-Stack Developer',
-  'React Specialist',
-  'Mobile App Developer',
+  'Mobile MVP Architect',
+  'React & Flutter Specialist',
+  'AI-Assisted Engineer',
 ]
 
 export default function Hero() {
-  const typedRole = useTypewriter(roles, 80, 40, 2200)
+  const typedRole = useTypewriter(roles)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const containerRef = useRef(null)
+  const visualRef = useRef(null)
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (!containerRef.current) return
-      const rect = containerRef.current.getBoundingClientRect()
-      setMousePos({
-        x: ((e.clientX - rect.left) / rect.width - 0.5) * 20,
-        y: ((e.clientY - rect.top) / rect.height - 0.5) * 20,
-      })
-    }
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
+  const handleMouseMove = (e) => {
+    if (!visualRef.current) return
+    const rect = visualRef.current.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    setMousePos({ x: x * 6, y: y * 6 })
+  }
+
+  const handleMouseLeave = () => {
+    setMousePos({ x: 0, y: 0 })
+  }
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center hero-grid overflow-hidden">
-      {/* Animated gradient blobs */}
-      <motion.div
-        className="absolute top-20 -left-40 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl pointer-events-none"
-        animate={{
-          x: [0, 50, -20, 30, 0],
-          y: [0, -30, 40, -20, 0],
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="absolute -bottom-20 -right-40 w-[500px] h-[500px] bg-accent/5 rounded-full blur-3xl pointer-events-none"
-        animate={{
-          x: [0, -40, 30, -20, 0],
-          y: [0, 30, -40, 20, 0],
-        }}
-        transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/[0.02] rounded-full blur-3xl pointer-events-none"
-        animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-      />
+    <section className="relative min-h-[100dvh] flex items-center hero-grid overflow-hidden pt-28 pb-16">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/4 -left-32 w-[550px] h-[550px] bg-foreground/[0.02] dark:bg-white/[0.02] rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-1/4 -right-32 w-[550px] h-[550px] bg-foreground/[0.02] dark:bg-white/[0.02] rounded-full blur-[140px] pointer-events-none" />
 
-      {/* Floating particles */}
-      <FloatingParticle delay={0} x="10%" y="20%" size={6} duration={7} />
-      <FloatingParticle delay={1} x="80%" y="15%" size={4} duration={9} />
-      <FloatingParticle delay={2} x="70%" y="70%" size={8} duration={11} />
-      <FloatingParticle delay={0.5} x="20%" y="75%" size={5} duration={8} />
-      <FloatingParticle delay={1.5} x="50%" y="10%" size={3} duration={10} />
-      <FloatingParticle delay={3} x="90%" y="50%" size={6} duration={12} />
-
-      <div className="relative max-w-6xl mx-auto px-6 py-28 md:py-32 w-full">
-        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-center">
-          {/* Left — Text content */}
+      <div className="relative max-w-6xl mx-auto px-6 w-full">
+        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-16 items-center">
+          
+          {/* Left Column — Text & CTAs */}
           <div>
-            {/* Status badge */}
+            {/* Availability Status Badge */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 mb-6"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-border bg-secondary/80 mb-5 backdrop-blur-md"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <span className="text-sm font-medium text-muted-foreground">Available for opportunities</span>
+              <span className="text-xs font-mono font-medium text-foreground">
+                Available for opportunities
+              </span>
             </motion.div>
 
-            {/* Full Name */}
-            <motion.p
+            {/* Headline */}
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-sm font-medium text-muted-foreground uppercase tracking-[0.2em] mb-3"
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.08] mb-4 text-foreground"
             >
-              S. M. Mehrab Hossain Jayeed
-            </motion.p>
-
-            {/* Animated Name */}
-            <motion.h1
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.15 }}
-              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-3"
-            >
-              {'I Build Things'.split('').map((char, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 40, rotateX: -90 }}
-                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.2 + i * 0.04,
-                    type: 'spring',
-                    stiffness: 150,
-                    damping: 12,
-                  }}
-                  className={char === ' ' ? '' : ''}
-                  style={{ display: 'inline-block', minWidth: char === ' ' ? '0.3em' : undefined }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-              <br />
-              <span className="gradient-text">
-                {'For The Web'.split('').map((char, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ opacity: 0, y: 40, rotateX: -90 }}
-                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: 0.7 + i * 0.04,
-                      type: 'spring',
-                      stiffness: 150,
-                      damping: 12,
-                    }}
-                    style={{ display: 'inline-block', minWidth: char === ' ' ? '0.3em' : undefined }}
-                  >
-                    {char}
-                  </motion.span>
-                ))}
-              </span>
+              Building <span className="gradient-text">Scalable Software</span> & Mobile MVPs.
             </motion.h1>
 
             {/* Typewriter role */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.2 }}
-              className="flex items-center gap-2 mb-2"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex items-center gap-2.5 mb-5 font-mono text-base sm:text-lg text-foreground/80 font-medium"
             >
-              <Sparkles size={16} className="text-primary" />
-              <p className="text-xl sm:text-2xl font-medium text-foreground/80 font-display">
-                {typedRole}
-                <motion.span
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reverse' }}
-                  className="inline-block w-[2px] h-6 bg-primary ml-0.5 align-middle"
-                />
-              </p>
+              <Terminal size={18} className="shrink-0 text-muted-foreground" />
+              <span>{typedRole}</span>
+              <span className="inline-block w-2 h-4 bg-foreground animate-pulse" />
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.3 }}
-              className="flex items-center gap-2 text-muted-foreground mb-6"
-            >
-              <MapPin size={15} />
-              <span className="text-sm">Dhaka, Bangladesh</span>
-            </motion.div>
-
-            {/* Description */}
+            {/* Subtext description */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.4 }}
-              className="text-base text-muted-foreground max-w-lg mb-8 leading-relaxed"
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-base text-muted-foreground leading-relaxed max-w-lg mb-8"
             >
-              I build <strong className="text-foreground font-medium">scalable web & mobile applications</strong> using
-              React, Node.js, and modern AI-assisted workflows. Specializing in clean architecture,
-              performance optimization, and rapid MVP delivery.
+              I turn early-stage ideas into dependable iOS, Android, and web products that are clear to use, robust to build, and ready to launch.
             </motion.p>
 
-            {/* CTA buttons */}
+            {/* Action Buttons Row */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.5 }}
-              className="flex flex-wrap gap-3 mb-8"
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex flex-wrap items-center gap-3 mb-10"
             >
-              <motion.a
+              <a
                 href="#projects"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-all shadow-md shadow-primary/15 hover:shadow-lg hover:shadow-primary/25"
+                onClick={(e) => {
+                  e.preventDefault()
+                  const el = document.querySelector('#projects')
+                  if (el) window.lenis ? window.lenis.scrollTo(el, { offset: -70 }) : el.scrollIntoView({ behavior: 'smooth' })
+                }}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-foreground text-background font-semibold text-sm hover:opacity-90 transition-all duration-200 cursor-pointer shadow-sm"
               >
-                <ExternalLink size={15} />
-                View My Work
-              </motion.a>
-              <motion.a
-                href="#contact"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-border text-foreground font-semibold text-sm hover:bg-muted transition-colors"
-              >
-                Hire Me
-              </motion.a>
-              <motion.a
+                <span>Explore Projects</span>
+                <ArrowUpRight size={16} />
+              </a>
+
+              <a
                 href="/SM_Mehrab_Hossain_Jayeed_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-border text-foreground font-semibold text-sm hover:bg-muted transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border bg-card/70 backdrop-blur-md text-foreground font-medium text-sm hover:bg-secondary transition-all duration-200 cursor-pointer"
               >
                 <FileDown size={15} />
-                Resume
-              </motion.a>
+                <span>Resume</span>
+              </a>
+
+              <div className="flex items-center gap-2 ml-1">
+                <a
+                  href="https://github.com/mhjayeed715"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-xl border border-border bg-card/70 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="GitHub Profile"
+                >
+                  <GitHubIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://linkedin.com/in/mhjayeed715"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-xl border border-border bg-card/70 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="LinkedIn Profile"
+                >
+                  <LinkedInIcon className="w-4 h-4" />
+                </a>
+              </div>
             </motion.div>
 
-            {/* Mini stat counters */}
+            {/* Realistic metrics bar */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.6 }}
-              className="flex items-center gap-6 mb-6"
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="grid grid-cols-3 gap-4 pt-6 border-t border-border/60 max-w-md"
             >
-              {heroStats.map((s, i) => (
-                <div key={s.label} className="text-center">
-                  <p className="font-display text-2xl font-bold gradient-text">
-                    <AnimatedCounter target={s.value} duration={2 + i * 0.3} />{s.suffix}
+              {heroStats.map((stat, i) => (
+                <div key={stat.label} className="text-left">
+                  <p className="font-display text-2xl font-bold text-foreground">
+                    <AnimatedCounter target={stat.value} duration={1.8 + i * 0.2} />
+                    <span className="text-muted-foreground font-normal">{stat.suffix}</span>
                   </p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{s.label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 font-medium">{stat.label}</p>
                 </div>
               ))}
             </motion.div>
-
-            {/* Social links */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 1.8 }}
-              className="flex items-center gap-4"
-            >
-              <motion.a
-                href="https://github.com/mhjayeed715"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, y: -2 }}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="GitHub"
-              >
-                <GitHubIcon className="w-5 h-5" />
-              </motion.a>
-              <motion.a
-                href="https://linkedin.com/in/mhjayeed715"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, y: -2 }}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="LinkedIn"
-              >
-                <LinkedInIcon className="w-5 h-5" />
-              </motion.a>
-              <div className="h-4 w-px bg-border" />
-              <div className="flex items-center gap-3">
-                {['react', 'nodejs', 'typescript', 'tailwindcss', 'postgresql'].map((t, i) => (
-                  <motion.img
-                    key={t}
-                    src={`/icons/${t}-original.svg`}
-                    alt={t}
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 0.4, scale: 1 }}
-                    transition={{ delay: 2 + i * 0.1, type: 'spring', stiffness: 200 }}
-                    whileHover={{ opacity: 1, scale: 1.3, y: -3 }}
-                    className="w-5 h-5 transition-opacity duration-300"
-                  />
-                ))}
-              </div>
-            </motion.div>
           </div>
 
-          {/* Right — Profile photo with animated effects */}
+          {/* Right Column — Circular Reference Frame with profile21.png */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, type: 'spring', stiffness: 80 }}
-            className="flex justify-center lg:justify-end"
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-center lg:items-end justify-center"
           >
-            <div className="relative">
-              {/* Animated rotating gradient ring */}
-              <motion.div
-                className="absolute -inset-5 rounded-full pointer-events-none"
-                style={{
-                  background: 'conic-gradient(from 0deg, transparent, var(--color-primary), var(--color-accent), transparent)',
-                  opacity: 0.2,
-                }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-              />
+            <div
+              ref={visualRef}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className="relative transition-transform duration-300 p-2 flex flex-col items-center lg:items-start"
+              style={{
+                transform: `perspective(1000px) rotateY(${mousePos.x}deg) rotateX(${-mousePos.y}deg)`,
+              }}
+            >
+              {/* Circular Avatar Container with Offset Shadow Disc */}
+              <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80">
+                {/* Circular Offset Solid Shadow Disc */}
+                <div className="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-full bg-zinc-900/90 dark:bg-zinc-800 border border-zinc-950/20 dark:border-white/10" />
 
-              {/* Pulsing outer ring */}
-              <motion.div
-                className="absolute -inset-3 rounded-full border-2 border-primary/20 pointer-events-none"
-                animate={{
-                  scale: [1, 1.05, 1],
-                  opacity: [0.2, 0.4, 0.2],
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              />
+                {/* Main Circular Portrait Container */}
+                <div className="relative w-full h-full rounded-full overflow-hidden bg-card border-2 border-foreground dark:border-white shadow-xl">
+                  {/* Colorful Portrait of Jayeed (profile21.png) */}
+                  <img
+                    src="/profile21.png"
+                    alt="S. M. Mehrab Hossain Jayeed"
+                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
 
-              {/* Decorative blurred ring */}
-              <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-primary/20 via-accent/10 to-transparent blur-xl pointer-events-none" />
+                {/* Top-Left Overlapping Badge (Rounded Pill) */}
+                <div className="absolute -top-1.5 -left-2 z-10 px-3.5 py-1 rounded-full bg-background border border-foreground dark:border-white text-foreground text-xs font-mono font-bold shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.8)] select-none">
+                  <span>Building interpretably</span>
+                </div>
+              </div>
 
-              {/* Photo with parallax */}
-              <motion.div
-                style={{
-                  x: mousePos.x * 0.5,
-                  y: mousePos.y * 0.5,
-                }}
-                transition={{ type: 'spring', stiffness: 50, damping: 20 }}
-                className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden ring-4 ring-border shadow-2xl shadow-primary/10"
-              >
-                <img
-                  src="/profile2.png"
-                  alt="S. M. Mehrab Hossain Jayeed"
-                  className="w-full h-full object-cover"
-                />
-                {/* Subtle shine overlay */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent"
-                  animate={{ x: ['-100%', '100%'] }}
-                  transition={{ duration: 4, repeat: Infinity, repeatDelay: 3, ease: 'easeInOut' }}
-                />
-              </motion.div>
+              {/* Text Block clearly separated below the circular photo (No Overlap) */}
+              <div className="mt-8 text-center lg:text-left w-full">
+                <h3 className="font-display font-bold text-xl text-foreground tracking-tight">
+                  S. M. Mehrab Hossain Jayeed
+                </h3>
+                <p className="text-xs font-mono text-muted-foreground mt-1">
+                  Full-Stack & Mobile Engineer &rarr; React & Flutter
+                </p>
+              </div>
 
-              {/* Orbiting tech icon */}
-              <motion.div
-                className="absolute w-10 h-10 rounded-full bg-card border border-border shadow-lg flex items-center justify-center"
-                style={{ top: '5%', right: '-5%' }}
-                animate={{
-                  y: [0, -10, 0, 10, 0],
-                  rotate: [0, 10, 0, -10, 0],
-                }}
-                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <img src="/icons/react-original.svg" alt="React" className="w-5 h-5" />
-              </motion.div>
-
-              <motion.div
-                className="absolute w-10 h-10 rounded-full bg-card border border-border shadow-lg flex items-center justify-center"
-                style={{ bottom: '10%', left: '-8%' }}
-                animate={{
-                  y: [0, 10, 0, -10, 0],
-                  rotate: [0, -10, 0, 10, 0],
-                }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-              >
-                <img src="/icons/nodejs-original.svg" alt="Node.js" className="w-5 h-5" />
-              </motion.div>
-
-              <motion.div
-                className="absolute w-9 h-9 rounded-full bg-card border border-border shadow-lg flex items-center justify-center"
-                style={{ bottom: '-3%', right: '15%' }}
-                animate={{
-                  y: [0, -8, 0, 8, 0],
-                  x: [0, 5, 0, -5, 0],
-                }}
-                transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-              >
-                <img src="/icons/typescript-original.svg" alt="TypeScript" className="w-4 h-4" />
-              </motion.div>
             </div>
           </motion.div>
+
         </div>
 
-        {/* Scroll indicator */}
-        <motion.a
-          href="#about"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
+        {/* Scroll down indicator */}
+        <div className="mt-14 flex justify-center">
+          <a
+            href="#projects"
+            onClick={(e) => {
+              e.preventDefault()
+              const el = document.querySelector('#projects')
+              if (el) window.lenis ? window.lenis.scrollTo(el, { offset: -70 }) : el.scrollIntoView({ behavior: 'smooth' })
+            }}
+            className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            aria-label="Scroll to Projects section"
           >
-            <ArrowDown size={20} />
-          </motion.div>
-        </motion.a>
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity }}
+            >
+              <ArrowDown size={18} />
+            </motion.div>
+          </a>
+        </div>
       </div>
     </section>
   )

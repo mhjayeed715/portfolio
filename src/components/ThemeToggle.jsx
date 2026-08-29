@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -7,10 +7,11 @@ export default function ThemeToggle() {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('theme')
       if (stored) return stored === 'dark'
-      return window.matchMedia('(prefers-color-scheme: dark)').matches
+      return true // Default theme is Dark
     }
-    return false
+    return true
   })
+  const btnRef = useRef(null)
 
   useEffect(() => {
     const root = document.documentElement
@@ -23,32 +24,54 @@ export default function ThemeToggle() {
     }
   }, [dark])
 
+  const toggleTheme = useCallback((e) => {
+    // Compute the circle origin from the button's position
+    const btn = btnRef.current
+    if (btn) {
+      const rect = btn.getBoundingClientRect()
+      const x = ((rect.left + rect.width / 2) / window.innerWidth) * 100
+      const y = ((rect.top + rect.height / 2) / window.innerHeight) * 100
+      document.documentElement.style.setProperty('--vt-x', `${x.toFixed(1)}%`)
+      document.documentElement.style.setProperty('--vt-y', `${y.toFixed(1)}%`)
+    }
+
+    if (typeof document !== 'undefined' && 'startViewTransition' in document) {
+      document.startViewTransition(() => {
+        setDark((prev) => !prev)
+      })
+    } else {
+      setDark((prev) => !prev)
+    }
+  }, [])
+
   return (
     <button
-      onClick={() => setDark(!dark)}
-      className="relative p-2 rounded-lg hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+      ref={btnRef}
+      onClick={toggleTheme}
+      className="relative p-2.5 rounded-xl border border-border/60 bg-card/50 backdrop-blur-md hover:bg-secondary/60 text-muted-foreground hover:text-foreground transition-all duration-200 cursor-pointer shadow-xs group"
       aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
       <AnimatePresence mode="wait" initial={false}>
         {dark ? (
           <motion.div
             key="sun"
-            initial={{ rotate: -90, opacity: 0, scale: 0.6 }}
+            initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
             animate={{ rotate: 0, opacity: 1, scale: 1 }}
-            exit={{ rotate: 90, opacity: 0, scale: 0.6 }}
-            transition={{ duration: 0.2 }}
+            exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Sun size={18} />
+            <Sun size={16} className="text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.4)]" />
           </motion.div>
         ) : (
           <motion.div
             key="moon"
-            initial={{ rotate: 90, opacity: 0, scale: 0.6 }}
+            initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
             animate={{ rotate: 0, opacity: 1, scale: 1 }}
-            exit={{ rotate: -90, opacity: 0, scale: 0.6 }}
-            transition={{ duration: 0.2 }}
+            exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Moon size={18} />
+            <Moon size={16} className="text-slate-600 dark:text-slate-400" />
           </motion.div>
         )}
       </AnimatePresence>

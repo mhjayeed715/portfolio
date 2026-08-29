@@ -11,18 +11,28 @@ export default function ScrollToTop() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const scrollToTop = () => {
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { duration: 1.2 })
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   return (
     <AnimatePresence>
       {visible && (
         <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-6 right-6 z-50 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary/90 transition-colors"
+          initial={{ opacity: 0, scale: 0.8, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 10 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-2xl bg-foreground text-background flex items-center justify-center shadow-lg hover:opacity-90 transition-opacity cursor-pointer border border-border"
           aria-label="Scroll to top"
         >
-          <ArrowUp size={18} />
+          <ArrowUp size={17} />
         </motion.button>
       )}
     </AnimatePresence>

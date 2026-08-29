@@ -8,7 +8,7 @@ const schools = [
     date: 'Expected 2026',
     location: 'Dhaka, Bangladesh',
     gpa: 'CGPA: 3.93 / 4.00',
-    detail: 'Current Semester: 9th',
+    detail: 'Current Semester: 10th',
     logo: '/education/shanto-mariam.svg',
   },
   {
@@ -31,94 +31,83 @@ const schools = [
   },
 ]
 
-const cardVariants = {
-  hidden: { opacity: 0, x: -30 },
-  visible: (i) => ({
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.5, delay: i * 0.15 },
-  }),
-}
-
 export default function Education() {
   return (
     <section id="education" className="py-24 section-alt">
       <div className="max-w-6xl mx-auto px-6">
+        
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-16"
+          className="mb-14"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-primary" />
-            <span className="text-sm font-semibold text-primary uppercase tracking-widest">Education</span>
+          <div className="flex items-center gap-2 text-muted-foreground font-mono text-xs uppercase tracking-widest mb-3">
+            <span className="w-6 h-[1.5px] bg-foreground" />
+            <span>Academic Background</span>
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
-            Academic <span className="gradient-text">Background</span>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+            Education & <span className="gradient-text">Scholastic Records</span>
           </h2>
+          <p className="text-muted-foreground text-sm max-w-xl mt-2">
+            Rigorous foundation in computer science, algorithmic mathematics, and engineering methodologies.
+          </p>
         </motion.div>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Vertical line */}
-          <div className="absolute left-4 md:left-8 top-0 bottom-0 w-px bg-border" />
+        {/* Timeline List */}
+        <div className="space-y-6">
+          {schools.map((school, i) => (
+            <motion.div
+              key={school.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              className="p-6 rounded-3xl glass-panel glow-card flex flex-col sm:flex-row items-start gap-5 border border-border/70 hover:border-foreground/30"
+            >
+              {/* Logo / Icon */}
+              <div className="w-14 h-14 rounded-2xl bg-secondary border border-border/80 flex items-center justify-center shrink-0 overflow-hidden p-2">
+                <img
+                  src={school.logo}
+                  alt={school.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
 
-          <div className="space-y-8">
-            {schools.map((school, i) => (
-              <motion.div
-                key={school.name}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-60px' }}
-                variants={cardVariants}
-                className="relative pl-12 md:pl-20"
-              >
-                {/* Timeline dot */}
-                <div className="absolute left-2.5 md:left-6.5 top-6 w-3 h-3 rounded-full bg-primary ring-4 ring-background" />
-
-                <div className="rounded-xl border border-border bg-card p-6 hover:border-primary/30 transition-all duration-300 hover:-translate-y-0.5 shadow-sm">
-                  <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-                    {/* Logo */}
-                    <div className="w-12 h-12 rounded-lg bg-muted border border-border flex items-center justify-center shrink-0 overflow-hidden">
-                      <img
-                        src={school.logo}
-                        alt={school.name}
-                        className="w-10 h-10 object-contain"
-                      />
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1">
-                      <h3 className="font-display text-lg font-semibold text-foreground">{school.name}</h3>
-                      <p className="text-sm text-muted-foreground mt-0.5">{school.degree}</p>
-
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-muted-foreground">
-                        <span className="inline-flex items-center gap-1.5">
-                          <CalendarDays size={12} className="text-primary" />
-                          {school.date}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5">
-                          <MapPin size={12} className="text-primary" />
-                          {school.location}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5">
-                          <Award size={12} className="text-primary" />
-                          {school.gpa}
-                        </span>
-                      </div>
-
-                      <p className="text-xs text-muted-foreground mt-2">{school.detail}</p>
-                    </div>
-                  </div>
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1">
+                  <h3 className="font-display text-lg font-bold text-foreground truncate">
+                    {school.name}
+                  </h3>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-foreground text-xs font-mono font-medium border border-border/80 shrink-0">
+                    <Award size={13} />
+                    <span>{school.gpa}</span>
+                  </span>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+
+                <p className="text-sm font-medium text-foreground/80 mb-3">{school.degree}</p>
+
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs font-mono text-muted-foreground">
+                  <span className="flex items-center gap-1.5">
+                    <CalendarDays size={13} className="text-foreground" />
+                    {school.date}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <MapPin size={13} className="text-foreground" />
+                    {school.location}
+                  </span>
+                  <span className="text-foreground/70">
+                    {school.detail}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
+
       </div>
     </section>
   )

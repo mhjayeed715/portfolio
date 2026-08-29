@@ -1,6 +1,6 @@
 # S. M. Mehrab Hossain Jayeed — Portfolio
 
-A modern, high-performance developer portfolio built with React 19, Tailwind CSS v4, and Framer Motion. Features dark/light mode, dynamic particle animations, project showcases, live credential verification with modal previews, and an integrated contact form.
+A modern, high-performance developer portfolio built with React 19, Tailwind CSS v4, Framer Motion, GSAP, and Lenis Smooth Scroll. Features dark/light mode with circular view transitions, crystal liquid glassmorphism, dynamic animations, project showcases, live credential verification with modal previews, and an integrated contact form with WhatsApp integration.
 
 🌐 **Live URL**: [https://jayeed.pro.bd/](https://jayeed.pro.bd/)  
 🔗 **Mirror / Vercel**: [https://mhjayeed715.vercel.app/](https://mhjayeed715.vercel.app/)
@@ -12,8 +12,9 @@ A modern, high-performance developer portfolio built with React 19, Tailwind CSS
 | Technology | Purpose |
 |---|---|
 | **React 19** + **Vite 7** | Modern component architecture & lightning-fast builds |
-| **Tailwind CSS v4** | Utility-first styling with CSS theme tokens |
-| **Framer Motion** | Fluid scroll-triggered animations and layout transitions |
+| **Tailwind CSS v4** | Utility-first styling with custom CSS design tokens |
+| **Framer Motion** + **GSAP** | Fluid scroll-triggered animations and spring physics |
+| **Lenis** | Ultra-smooth momentum-based inertia scrolling |
 | **EmailJS** | Direct client-side email delivery for the contact form |
 | **Lucide React** | Cohesive, modern icon library |
 
@@ -21,8 +22,9 @@ A modern, high-performance developer portfolio built with React 19, Tailwind CSS
 
 ## ✨ Features & Highlights
 
-- **Light / Dark Mode** — Instant theme switching with smooth transitions, persisted in `localStorage`.
-- **Interactive Hero** — Typewriter role cycler, floating background particles, orbiting tech badges, and parallax cursor tracking.
+- **Crystal Liquid Glassmorphism** — High-refractive translucent glass capsule navbar with directional scroll shrink/auto-expand and specular highlight buttons.
+- **Light / Dark Mode** — Circular clip view-transition theme switching persisted in `localStorage`.
+- **Interactive Hero** — Typewriter role cycler, dynamic availability badge, and 3D parallax cursor tracking.
 - **Featured Projects Showcase** — Clean cards with tech stacks, live demos, repository links, and award badges:
   1. **UniShareSync Mobile App** — *2nd Place Winner (Software Project Showcase 2026)* • Flutter, Supabase, Groq RAG AI, Real-time Whiteboard/Kanban.
   2. **Focusnyx** — *Student Life OS & Cognitive Shield* • Next.js 14, Supabase, Python Win32 Companion, Chrome MV3 Extension.
@@ -34,8 +36,8 @@ A modern, high-performance developer portfolio built with React 19, Tailwind CSS
   - **CS50’s Introduction to AI with Python** — HarvardX / edX
   - **CS50x: Introduction to Computer Science** — HarvardX / edX
   - **Anthropic Model Context Protocol (MCP) Introduction** — Anthropic
-- **Working Contact Form** — Validated form powered by EmailJS delivering messages directly to inbox.
-- **Fully Responsive & Accessible** — Optimized for mobile, tablet, and desktop viewports with accessible ARIA semantics.
+- **Working Contact Form & WhatsApp** — Direct messaging via EmailJS and 1-tap WhatsApp direct chat.
+- **Fully Responsive & Accessible** — Mobile-first floating navigation drawer, touch ergonomics, and accessible ARIA semantics.
 
 ---
 
@@ -69,9 +71,7 @@ npm run preview
 portfolio-site/
 ├── public/
 │   ├── SM_Mehrab_Hossain_Jayeed_Resume.pdf  # Downloadable resume
-│   ├── profile.png                         # Profile photo
-│   ├── profile2.png                        # Hero profile photo
-│   ├── favicon.svg                         # Site favicon
+│   ├── profile21.png                       # Primary portrait & tab icon
 │   ├── certificates/                       # High-res certificate previews
 │   │   ├── CS50AI1.png
 │   │   ├── CS50x1.png
@@ -81,22 +81,24 @@ portfolio-site/
 │   └── education/                          # University and college logos
 ├── src/
 │   ├── components/
-│   │   ├── Navbar.jsx                      # Fixed frosted-glass navigation bar
-│   │   ├── Hero.jsx                        # Animated hero with particle canvas
-│   │   ├── About.jsx                       # About narrative & strength metrics
-│   │   ├── Services.jsx                    # Core engineering services
-│   │   ├── Skills.jsx                      # Tech stack grid & proficiency levels
+│   │   ├── Navbar.jsx                      # Liquid-glass capsule navigation & mobile drawer
+│   │   ├── Hero.jsx                        # Animated hero with interactive 3D portrait
+│   │   ├── About.jsx                       # About narrative & engineering strengths
+│   │   ├── Services.jsx                    # Core engineering services & deliverable tiers
+│   │   ├── Skills.jsx                      # Dual-rail infinite tech marquee & filter
 │   │   ├── Projects.jsx                    # Featured & expandable projects showcase
 │   │   ├── Achievements.jsx                # Competitions & verified certifications
 │   │   ├── Philosophy.jsx                  # Software engineering principles
 │   │   ├── Education.jsx                   # Academic timeline
-│   │   ├── Contact.jsx                     # EmailJS contact form & social links
-│   │   ├── Footer.jsx                      # Multi-column footer & copyright
-│   │   ├── ThemeToggle.jsx                 # Light/dark mode toggle
-│   │   └── ScrollToTop.jsx                 # Smooth scroll-to-top floating button
+│   │   ├── Contact.jsx                     # EmailJS contact form & WhatsApp direct chat
+│   │   ├── Footer.jsx                      # Multi-column footer & quick links
+│   │   ├── ThemeToggle.jsx                 # View-transition dark/light mode toggle
+│   │   ├── LoadingScreen.jsx               # Initial cinematic loader
+│   │   ├── SmoothScroll.jsx                # Lenis smooth scroll provider
+│   │   └── ScrollToTop.jsx                 # Smooth scroll-to-top button
 │   ├── App.jsx                             # Root layout assembler
 │   ├── main.jsx                            # React entry point
-│   └── index.css                           # Tailwind CSS theme variables & styling
+│   └── index.css                           # Liquid glass tokens & Tailwind CSS styling
 ├── index.html
 ├── vite.config.js
 └── package.json

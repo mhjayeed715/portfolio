@@ -1,116 +1,116 @@
 import { motion } from 'framer-motion'
-import { Globe, Smartphone, Database, Bot, Shield, FileCode2 } from 'lucide-react'
+import { Globe, Smartphone, Database, Bot, ShieldCheck, Zap } from 'lucide-react'
 
 const services = [
   {
-    icon: Globe,
-    title: 'Full-Stack Web Development',
-    description:
-      'End-to-end web applications with React, Node.js, Express, and PostgreSQL/MongoDB. REST APIs, real-time features, role-based access, and scalable architecture.',
-    tags: ['React', 'Node.js', 'PostgreSQL', 'MongoDB'],
-  },
-  {
     icon: Smartphone,
-    title: 'Mobile App Development',
+    title: 'Mobile MVP Development',
     description:
-      'Cross-platform mobile applications using Flutter and Dart with clean UI, OTP authentication, push notifications, and seamless backend integration.',
-    tags: ['Flutter', 'Dart', 'Supabase'],
+      'Cross-platform iOS and Android apps with Flutter, Supabase, push alerts, and offline caching. From design specs to App Store & Play Store readiness.',
+    tags: ['Flutter', 'Dart', 'Supabase', 'Mobile UX'],
   },
   {
-    icon: Database,
-    title: 'Database Design & API Architecture',
+    icon: Globe,
+    title: 'Full-Stack Web Engineering',
     description:
-      'Normalized database schemas, efficient queries, RESTful APIs with proper error handling, pagination, and security best practices.',
-    tags: ['PostgreSQL', 'MySQL', 'MongoDB', 'Express.js'],
+      'High-performance web applications built with React, Next.js, and Node.js. Clean REST/GraphQL APIs, real-time sync, and SEO-optimized architecture.',
+    tags: ['React', 'Node.js', 'PostgreSQL', 'Tailwind'],
   },
   {
     icon: Bot,
-    title: 'AI-Assisted Development',
+    title: 'AI Workflows & RAG Integration',
     description:
-      'Rapid prototyping and MVP delivery using AI coding tools. Structured prompt engineering, code validation, and AI-human hybrid workflows for faster shipping.',
-    tags: ['Prompt Engineering', 'AI Tools', 'Rapid MVP'],
+      'Building intelligent assistant features, semantic document search (RAG) with vector databases, and automated LLM pipelines using Groq & OpenAI APIs.',
+    tags: ['RAG Pipelines', 'Groq API', 'Prompt Eng', 'Vectors'],
   },
   {
-    icon: Shield,
-    title: 'Auth & Security Implementation',
+    icon: Database,
+    title: 'Database Architecture & APIs',
     description:
-      'JWT authentication, email OTP verification, role-based access control (RBAC), input validation, and secure session management.',
-    tags: ['JWT', 'OTP', 'RBAC', 'Security'],
+      'Normalized schema design, query optimization, indexing, and scalable RESTful endpoints with comprehensive error handling and logging.',
+    tags: ['PostgreSQL', 'MongoDB', 'Supabase', 'Redis'],
   },
   {
-    icon: FileCode2,
-    title: 'Documentation & Version Control',
+    icon: ShieldCheck,
+    title: 'Security, Auth & RBAC',
     description:
-      'Clean, well-structured documentation and version-controlled codebases using Git. Conventional commits, branching strategies, README standards, and collaborative workflows.',
-    tags: ['Git', 'GitHub', 'Markdown', 'CI/CD'],
+      'Enterprise-grade authentication architectures: JWT sessions, email/phone OTP verification, role-based access control, and sanitization.',
+    tags: ['JWT', 'OTP Auth', 'RBAC', 'Data Security'],
+  },
+  {
+    icon: Zap,
+    title: 'Performance & Optimization',
+    description:
+      'Lighthouse audits, bundle splitting, memory leak debugging, rendering performance optimization, and hardware-accelerated animations.',
+    tags: ['Vite', 'Turbopack', 'Web Vitals', 'Profiling'],
   },
 ]
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, delay: i * 0.1 },
-  }),
-}
-
 export default function Services() {
   return (
-    <section id="services" className="py-24 section-alt">
+    <section id="services" className="py-24">
       <div className="max-w-6xl mx-auto px-6">
+        
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-16"
+          className="mb-14"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-primary" />
-            <span className="text-sm font-semibold text-primary uppercase tracking-widest">Services</span>
+          <div className="flex items-center gap-2 text-muted-foreground font-mono text-xs uppercase tracking-widest mb-3">
+            <span className="w-6 h-[1.5px] bg-foreground" />
+            <span>Offerings & Solutions</span>
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
-            Problems I <span className="gradient-text">Solve</span>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+            How I Can <span className="gradient-text">Help Your Team</span>
           </h2>
-          <p className="text-muted-foreground max-w-xl">
-            From idea to deployment — I handle the full lifecycle of building modern, secure, and scalable applications.
+          <p className="text-muted-foreground text-sm max-w-xl mt-2">
+            Delivering production-ready engineering for startups, founders, and scaling digital products.
           </p>
         </motion.div>
 
-        {/* Grid */}
+        {/* 3-Column Services Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((s, i) => (
-            <motion.div
-              key={s.title}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-40px' }}
-              variants={cardVariants}
-              className="group glow-card rounded-xl border border-border bg-card p-6 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden shadow-sm"
-            >
-              <div className="relative z-10">
-                <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <s.icon size={22} className="text-primary" />
+          {services.map((s, i) => {
+            const Icon = s.icon
+            return (
+              <motion.div
+                key={s.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                className="group p-6 rounded-3xl glass-panel glow-card flex flex-col justify-between border border-border/70 hover:border-foreground/30 hover:-translate-y-1 transition-all duration-300"
+              >
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-secondary border border-border/80 flex items-center justify-center text-foreground mb-5 group-hover:bg-foreground group-hover:text-background transition-colors duration-300">
+                    <Icon size={20} />
+                  </div>
+                  <h3 className="font-display text-lg font-bold text-foreground mb-2">
+                    {s.title}
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+                    {s.description}
+                  </p>
                 </div>
-                <h3 className="font-display text-lg font-semibold mb-2 text-foreground">{s.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4">{s.description}</p>
-                <div className="flex flex-wrap gap-1.5">
+
+                <div className="flex flex-wrap gap-1.5 pt-4 border-t border-border/40">
                   {s.tags.map((t) => (
                     <span
                       key={t}
-                      className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-primary/10 text-primary"
+                      className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-secondary/80 text-foreground/80 border border-border/60"
                     >
                       {t}
                     </span>
                   ))}
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            )
+          })}
         </div>
+
       </div>
     </section>
   )

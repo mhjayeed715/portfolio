@@ -1,278 +1,262 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Trophy, Medal, GraduationCap, Brain, Bot, Code2, ExternalLink, ShieldCheck, X, ZoomIn, Award } from 'lucide-react'
+import { Trophy, Award, ExternalLink, ShieldCheck, GraduationCap, ZoomIn, X, Binary } from 'lucide-react'
 
 const competitions = [
   {
     title: '2nd Place — Software Project Showcase 2026',
     organizer: 'Software Community, SMUCT',
-    badge: '2nd Place Winner',
-    badgeIcon: Medal,
-    badgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-    highlightProject: 'UniShareSync Mobile App',
-    year: '2026',
-    category: 'Inter-Department Software Contest',
     description:
       'Secured 2nd place at the inter-department Software Project Showcase 2026 organised by the Software Community, showcasing the UniShareSync mobile ecosystem.',
+    badge: '2nd Place Winner',
+    badgeColor: 'bg-foreground text-background border-border',
     icon: Trophy,
+    badgeIcon: Award,
+    year: '2026',
+    highlightProject: 'UniShareSync Mobile App',
   },
   {
     title: 'Champion — Project Showcasing 2025',
     organizer: 'Robotics & IoT Community, SMUCT',
-    badge: 'Champion',
-    badgeIcon: Trophy,
-    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-    highlightProject: 'Team X',
-    year: '2025',
-    category: 'Engineering & Innovation',
     description:
       'Team X recognised as champion, demonstrating engineering and problem-solving skills in a competitive academic setting.',
-    icon: Award,
+    badge: 'Champion',
+    badgeColor: 'bg-foreground text-background border-border',
+    icon: Trophy,
+    badgeIcon: Award,
+    year: '2025',
+    highlightProject: 'Team X',
   },
   {
     title: 'Datathon — ML Contest 2026',
     organizer: 'Machine Learning Community, CSE & CSIT Department, SMUCT',
-    badge: 'ML Competitor',
-    badgeIcon: Brain,
-    badgeColor: 'bg-primary/10 text-primary border-primary/20',
-    highlightProject: 'Loan Approval ML Pipeline',
-    year: '2026',
-    category: 'Machine Learning & Data Science',
     description:
       'Competed in the ML Contest by the CSE & CSIT Department at Shanto-Mariam University. Built an end-to-end pipeline on a loan approval dataset: imputation, IQR outlier removal, feature encoding, normalization, and 20+ models with RandomizedSearchCV tuning.',
-    icon: Brain,
+    badge: 'ML Competitor',
+    badgeColor: 'bg-secondary text-foreground border-border/80',
+    icon: Binary,
+    badgeIcon: Award,
+    year: '2026',
+    highlightProject: 'Loan Approval ML Pipeline',
   },
 ]
 
 const certifications = [
   {
-    title: 'CS50’s Introduction to Artificial Intelligence with Python',
-    issuer: 'HarvardX, edX Verified Certificate',
+    title: 'CS50 AI: Introduction to Artificial Intelligence with Python',
+    issuer: 'HarvardX (Verified Certificate)',
+    description:
+      'Comprehensive mastery of Graph Search, Minimax, Constraint Satisfaction, Markov Models, Bayesian Networks, HMMs, Machine Learning, and Neural Networks.',
     badge: 'Harvard Verified',
     verifyUrl: 'https://courses.edx.org/certificates/0f757edad714434399b0fa981bed388d',
     image: '/certificates/CS50AI1.png',
-    icon: Brain,
-    tags: ['Search Algorithms', 'Optimization', 'Machine Learning', 'Neural Networks', 'NLP'],
-    description:
-      'Covered foundational AI principles: adversarial search (Minimax), optimization, probabilistic models, machine learning algorithms, deep learning neural networks, and natural language processing.',
+    tags: ['Machine Learning', 'Neural Networks', 'Python'],
+    icon: GraduationCap,
   },
   {
-    title: 'CS50x: Introduction to Computer Science',
-    issuer: 'HarvardX, edX Verified Certificate',
+    title: "CS50x: CS50's Introduction to Computer Science",
+    issuer: 'HarvardX (Verified Certificate)',
+    description:
+      'Rigorous computer science curriculum covering C, Python, SQL, HTML/CSS, JavaScript, memory management, data structures, algorithms, and web app security.',
     badge: 'Harvard Verified',
     verifyUrl: 'https://courses.edx.org/certificates/45442b0106884e8a8c983ab208b027e1',
     image: '/certificates/CS50x1.png',
-    icon: Code2,
-    tags: ['C', 'Python', 'Flask', 'SQLite', 'Socket.IO', 'Algorithms'],
-    description:
-      'Comprehensive computer science fundamentals including algorithmic thinking, memory management, and web development. Built GigCampus as the capstone final project using Flask, SQLite, and Socket.IO.',
+    tags: ['C', 'Data Structures', 'Algorithms', 'SQL'],
+    icon: GraduationCap,
   },
   {
-    title: 'Anthropic Model Context Protocol (MCP) Introduction',
-    issuer: 'Anthropic',
-    badge: 'Agentic AI & Tool-Use',
+    title: 'Introduction to Model Context Protocol (MCP)',
+    issuer: 'Anthropic Interactive Academy',
+    description:
+      'Engineered LLM-to-tool connections, custom MCP servers, secure context passing, resource templates, and prompt routing for AI workflows.',
+    badge: 'Anthropic MCP',
     verifyUrl: 'https://verify.skilljar.com/c/vbhgugbt9567',
     image: '/certificates/anthropic.png',
-    icon: Bot,
-    tags: ['MCP Architecture', 'Tool-Use Protocols', 'Agentic Pipelines', 'Context Integration'],
-    description:
-      'Studied how frontier AI systems expose tool-use capabilities to external agents, multi-agent frameworks, and integrative LLM pipelines.',
+    tags: ['MCP Architecture', 'LLM Tooling', 'Agentic Systems'],
+    icon: ShieldCheck,
   },
 ]
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, delay: i * 0.1 },
-  }),
-}
 
 export default function Achievements() {
   const [selectedCert, setSelectedCert] = useState(null)
 
   return (
-    <section id="achievements" className="py-24 relative overflow-hidden">
-      {/* Ambient background glow */}
-      <div className="absolute top-1/3 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="relative max-w-6xl mx-auto px-6">
-        {/* Header */}
+    <section id="achievements" className="py-24 section-alt">
+      <div className="max-w-6xl mx-auto px-6">
+        
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-16"
+          className="mb-14"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-primary" />
-            <span className="text-sm font-semibold text-primary uppercase tracking-widest">
-              Honors & Credentials
-            </span>
+          <div className="flex items-center gap-2 text-muted-foreground font-mono text-xs uppercase tracking-widest mb-3">
+            <span className="w-6 h-[1.5px] bg-foreground" />
+            <span>Honors & Credentials</span>
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
-            Competitions & <span className="gradient-text">Certifications</span>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+            Competitions & <span className="gradient-text">Achievements</span>
           </h2>
-          <p className="text-muted-foreground max-w-xl">
-            Competitive programming hackathons, project showcases, and verified academic credentials.
+          <p className="text-muted-foreground text-sm max-w-xl mt-2">
+            Competitive hackathons, project showcases, and verified academic credentials.
           </p>
         </motion.div>
 
-        {/* Competitions & Achievements Section */}
-        <div className="mb-20">
-          <div className="flex items-center gap-2 mb-8">
-            <Trophy className="w-5 h-5 text-primary" />
-            <h3 className="font-display text-xl font-bold text-foreground">
+        {/* Competitions & Achievements */}
+        <div className="mb-16">
+          <div className="flex items-center gap-2 mb-6">
+            <Trophy className="w-4 h-4 text-foreground" />
+            <h3 className="font-display text-lg font-bold text-foreground">
               Competitions & Achievements
             </h3>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {competitions.map((item, i) => (
-              <motion.div
-                key={item.title}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-40px' }}
-                variants={cardVariants}
-                className="group relative rounded-xl border border-border bg-card p-6 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-sm flex flex-col justify-between"
-              >
-                {/* Top accent badge */}
-                <div>
-                  <div className="flex items-start justify-between gap-2 mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                      <item.icon className="w-5 h-5 text-primary" />
+            {competitions.map((item, i) => {
+              const Icon = item.icon
+              const BadgeIcon = item.badgeIcon
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                  className="p-6 rounded-3xl glass-panel glow-card flex flex-col justify-between border border-border/70 hover:border-foreground/30"
+                >
+                  <div>
+                    <div className="flex items-start justify-between gap-2 mb-4">
+                      <div className="w-10 h-10 rounded-2xl bg-secondary border border-border/80 flex items-center justify-center text-foreground">
+                        <Icon size={18} />
+                      </div>
+                      <span className={`inline-flex items-center gap-1 text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full border ${item.badgeColor}`}>
+                        <BadgeIcon size={12} />
+                        <span>{item.badge}</span>
+                      </span>
                     </div>
-                    <span
-                      className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full border ${item.badgeColor}`}
-                    >
-                      <item.badgeIcon size={12} className="shrink-0" />
-                      <span>{item.badge}</span>
-                    </span>
+
+                    <h4 className="font-display text-base font-bold text-foreground mb-1 leading-snug">
+                      {item.title}
+                    </h4>
+                    <p className="text-xs font-mono text-muted-foreground mb-3">{item.organizer}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+                      {item.description}
+                    </p>
                   </div>
 
-                  <h4 className="font-display text-lg font-bold text-foreground mb-1 leading-snug">
-                    {item.title}
-                  </h4>
-                  <p className="text-xs font-medium text-primary mb-3">{item.organizer}</p>
-
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-                    {item.description}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-border/60 flex items-center justify-between text-[11px] text-muted-foreground">
-                  <span className="font-medium text-foreground/80">{item.highlightProject}</span>
-                  <span className="font-mono">{item.year}</span>
-                </div>
-              </motion.div>
-            ))}
+                  <div className="pt-3 border-t border-border/40 flex items-center justify-between text-[11px] font-mono text-muted-foreground">
+                    <span className="font-medium text-foreground/80">{item.highlightProject}</span>
+                    <span>{item.year}</span>
+                  </div>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
 
-        {/* Certifications Section */}
+        {/* Certifications (Compact Cards) */}
         <div>
-          <div className="flex items-center gap-2 mb-8">
-            <GraduationCap className="w-5 h-5 text-primary" />
-            <h3 className="font-display text-xl font-bold text-foreground">
-              Professional Certifications
+          <div className="flex items-center gap-2 mb-6">
+            <GraduationCap className="w-4 h-4 text-foreground" />
+            <h3 className="font-display text-lg font-bold text-foreground">
+              Verified Certifications
             </h3>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {certifications.map((cert, i) => (
-              <motion.div
-                key={cert.title}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-40px' }}
-                variants={cardVariants}
-                className="group p-6 rounded-xl border border-border bg-card hover:border-primary/30 transition-all duration-300 hover:-translate-y-0.5 shadow-sm relative overflow-hidden flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-start gap-4 mb-3">
-                    <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <cert.icon className="w-5 h-5 text-primary" />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
-                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">
-                          <ShieldCheck size={11} className="shrink-0" />
-                          <span>{cert.badge}</span>
-                        </span>
+          <div className="grid md:grid-cols-3 gap-5">
+            {certifications.map((cert, i) => {
+              const Icon = cert.icon
+              return (
+                <motion.div
+                  key={cert.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                  className="p-5 rounded-2xl glass-panel glow-card flex flex-col justify-between border border-border/70 hover:border-foreground/30 overflow-hidden"
+                >
+                  <div>
+                    {/* Header with Icon and Badge */}
+                    <div className="flex items-start justify-between gap-2 mb-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-secondary border border-border/80 flex items-center justify-center text-foreground">
+                        <Icon size={15} />
                       </div>
+                      <span className="inline-flex items-center gap-1 text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-secondary text-foreground border border-border/80">
+                        <ShieldCheck size={10} />
+                        <span>{cert.badge}</span>
+                      </span>
+                    </div>
 
-                      <h4 className="font-display text-base font-bold text-foreground mb-1 leading-snug">
-                        {cert.title}
-                      </h4>
-                      <p className="text-xs font-medium text-primary mb-2">{cert.issuer}</p>
+                    {/* Compact Certificate Thumbnail */}
+                    {cert.image && (
+                      <div
+                        onClick={() => setSelectedCert(cert)}
+                        className="relative my-2.5 rounded-xl overflow-hidden bg-secondary border border-border/70 group/thumb cursor-pointer aspect-[16/8]"
+                      >
+                        <img
+                          src={cert.image}
+                          alt={cert.title}
+                          className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-white text-[11px] font-mono font-medium">
+                          <ZoomIn size={13} />
+                          <span>View Certificate</span>
+                        </div>
+                      </div>
+                    )}
+
+                    <h4 className="font-display text-sm font-bold text-foreground mb-1 leading-snug">
+                      {cert.title}
+                    </h4>
+                    <p className="text-[11px] font-mono text-muted-foreground mb-2">{cert.issuer}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-3 line-clamp-3">
+                      {cert.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {cert.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-secondary text-foreground/80 border border-border/50"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-                    {cert.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5 mb-5">
-                    {cert.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] font-medium px-2 py-0.5 rounded bg-secondary text-muted-foreground border border-border"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Verification Action Bar & Secondary Thumbnail */}
-                <div className="pt-4 border-t border-border/60 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
+                  <div className="pt-3 border-t border-border/40 flex items-center justify-between gap-2">
                     {cert.verifyUrl && (
                       <a
                         href={cert.verifyUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-sm"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-foreground text-background text-[11px] font-semibold hover:opacity-90 transition-opacity shadow-xs"
                       >
-                        <ShieldCheck size={13} />
-                        Verify Credential
-                        <ExternalLink size={11} className="opacity-80" />
+                        <ShieldCheck size={11} />
+                        <span>Verify Credential</span>
+                        <ExternalLink size={9} className="opacity-80" />
                       </a>
                     )}
-                  </div>
 
-                  {/* Secondary Click-to-Expand Thumbnail */}
-                  {cert.image && (
-                    <button
-                      onClick={() => setSelectedCert(cert)}
-                      className="group/thumb flex items-center gap-2 px-2.5 py-1 rounded-lg border border-border bg-secondary/50 hover:bg-secondary text-xs text-muted-foreground hover:text-foreground transition-all cursor-pointer"
-                      title="View certificate thumbnail"
-                    >
-                      <div className="w-7 h-5 rounded overflow-hidden border border-border relative bg-muted shrink-0">
-                        <img
-                          src={cert.image}
-                          alt={cert.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <span className="text-[11px] font-medium flex items-center gap-1">
-                        <ZoomIn size={12} className="text-primary" />
-                        Preview
-                      </span>
-                    </button>
-                  )}
-                </div>
-              </motion.div>
-            ))}
+                    {cert.image && (
+                      <button
+                        onClick={() => setSelectedCert(cert)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border bg-card text-[11px] text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                      >
+                        <ZoomIn size={11} className="text-foreground" />
+                        <span>Preview</span>
+                      </button>
+                    )}
+                  </div>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
+
       </div>
 
       {/* Certificate Modal Lightbox */}
@@ -283,63 +267,51 @@ export default function Achievements() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedCert(null)}
-            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xl"
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-2xl w-full bg-card border border-border rounded-2xl shadow-2xl overflow-hidden p-5 sm:p-6"
+              className="relative max-w-3xl w-full p-6 rounded-3xl glass-panel border border-border/80 shadow-2xl"
             >
-              {/* Modal Header */}
-              <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="flex items-center justify-between pb-4 mb-4 border-b border-border/60">
                 <div>
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                    <ShieldCheck size={11} className="shrink-0" />
-                    <span>{selectedCert.badge}</span>
-                  </span>
-                  <h3 className="font-display text-lg sm:text-xl font-bold text-foreground mt-1">
+                  <h3 className="font-display font-bold text-lg text-foreground">
                     {selectedCert.title}
                   </h3>
-                  <p className="text-xs text-muted-foreground">{selectedCert.issuer}</p>
+                  <p className="text-xs font-mono text-muted-foreground">{selectedCert.issuer}</p>
                 </div>
                 <button
                   onClick={() => setSelectedCert(null)}
-                  className="p-1.5 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors cursor-pointer"
-                  aria-label="Close modal"
+                  className="p-2 rounded-xl border border-border bg-card text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                 >
                   <X size={18} />
                 </button>
               </div>
 
-              {/* Certificate Image */}
-              <div className="rounded-xl overflow-hidden border border-border bg-secondary/30 mb-5 max-h-[60vh] flex items-center justify-center">
+              <div className="rounded-2xl overflow-hidden bg-secondary border border-border max-h-[70vh] flex items-center justify-center">
                 <img
                   src={selectedCert.image}
                   alt={selectedCert.title}
-                  className="w-full h-auto max-h-[58vh] object-contain"
+                  className="w-full h-auto object-contain max-h-[65vh]"
                 />
               </div>
 
-              {/* Modal Footer */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-                <p className="text-xs text-muted-foreground text-center sm:text-left">
-                  Verified credential issued by {selectedCert.issuer}.
-                </p>
-                {selectedCert.verifyUrl && (
+              {selectedCert.verifyUrl && (
+                <div className="mt-4 flex justify-end">
                   <a
                     href={selectedCert.verifyUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background font-semibold text-xs hover:opacity-90 transition-opacity shadow-xs"
                   >
-                    <ShieldCheck size={14} />
-                    Verify on Official Portal
+                    <span>Open Official Verification</span>
                     <ExternalLink size={12} />
                   </a>
-                )}
-              </div>
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}

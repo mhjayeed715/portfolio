@@ -1,205 +1,172 @@
 import { motion } from 'framer-motion'
+import { Code2, Smartphone, Database, Cpu } from 'lucide-react'
 
-/* ── Skill categories ── */
-const categories = [
-  {
-    label: 'Languages',
-    items: [
-      { name: 'JavaScript', icon: '/icons/javascript-original.svg' },
-      { name: 'TypeScript', icon: '/icons/typescript-original.svg' },
-      { name: 'Python', icon: '/icons/python-original.svg' },
-      { name: 'C', icon: '/icons/c-original.svg' },
-      { name: 'C++', icon: '/icons/cplusplus-original.svg' },
-      { name: 'Dart', icon: '/icons/dart-original.svg' },
-      { name: 'Java', icon: '/icons/java-original.svg' },
-      { name: 'HTML5', icon: '/icons/html5-original.svg' },
-      { name: 'CSS3', icon: '/icons/css3-original.svg' },
-    ],
-  },
-  {
-    label: 'Frameworks & Libraries',
-    items: [
-      { name: 'React', icon: '/icons/react-original.svg' },
-      { name: 'Node.js', icon: '/icons/nodejs-original.svg' },
-      { name: 'Express.js', icon: '/icons/express-original.svg' },
-      { name: 'Tailwind CSS', icon: '/icons/tailwindcss-original.svg' },
-      { name: 'Flutter', icon: '/icons/flutter-original.svg' },
-      { name: 'Vite', icon: '/icons/vite-original.svg' },
-      { name: 'Flask', icon: '/icons/flask-original.svg' },
-      { name: 'Jinja', icon: '/icons/jinja-original.svg' },
-      { name: 'Socket.IO', icon: '/icons/socketio-original.svg' },
-    ],
-  },
-  {
-    label: 'Databases & Backend',
-    items: [
-      { name: 'PostgreSQL', icon: '/icons/postgresql-original.svg' },
-      { name: 'MongoDB', icon: '/icons/mongodb-original.svg' },
-      { name: 'MySQL', icon: '/icons/mysql-original.svg' },
-      { name: 'SQLite', icon: '/icons/sqlite-original.svg' },
-      { name: 'Supabase', icon: '/icons/supabase-original.svg' },
-    ],
-  },
-  {
-    label: 'Tools & Platforms',
-    items: [
-      { name: 'Git', icon: '/icons/git-original.svg' },
-      { name: 'GitHub', icon: '/icons/github-original.svg' },
-      { name: 'VS Code', icon: '/icons/vscode-original.svg' },
-      { name: 'Postman', icon: '/icons/postman-original.svg' },
-      { name: 'Vercel', icon: '/icons/vercel-original.svg' },
-      { name: 'Figma', icon: '/icons/figma-original.svg' },
-      { name: 'Canva', icon: '/icons/canva-original.svg' },
-    ],
-  },
+// Continuous marquee track row 1
+const marqueeRow1 = [
+  { name: 'React 19', icon: '/icons/react-original.svg', tag: 'UI Library' },
+  { name: 'Flutter', icon: '/icons/flutter-original.svg', tag: 'Mobile SDK' },
+  { name: 'TypeScript', icon: '/icons/typescript-original.svg', tag: 'Language' },
+  { name: 'Node.js', icon: '/icons/nodejs-original.svg', tag: 'Runtime' },
+  { name: 'Supabase', icon: '/icons/supabase-original.svg', tag: 'BaaS & Auth' },
+  { name: 'PostgreSQL', icon: '/icons/postgresql-original.svg', tag: 'Database' },
+  { name: 'Dart', icon: '/icons/dart-original.svg', tag: 'Language' },
+  { name: 'Tailwind CSS', icon: '/icons/tailwindcss-original.svg', tag: 'Styling' },
 ]
 
-const otherSkills = [
-  'LSTM', 'Federated Learning', 'NLP', 'JWT', 'OTP',
-  'MS Office', 'Google Workspace', 'MS Teams', 'Zoom', 'Prompt Engineering',
+// Continuous marquee track row 2
+const marqueeRow2 = [
+  { name: 'Express.js', icon: '/icons/express-original.svg', tag: 'Backend' },
+  { name: 'Python', icon: '/icons/python-original.svg', tag: 'AI & Scripting' },
+  { name: 'MongoDB', icon: '/icons/mongodb-original.svg', tag: 'NoSQL' },
+  { name: 'Git & GitHub', icon: '/icons/git-original.svg', tag: 'Version Control' },
+  { name: 'Postman', icon: '/icons/postman-original.svg', tag: 'API Testing' },
+  { name: 'SQLite', icon: '/icons/sqlite-original.svg', tag: 'Embedded DB' },
+  { name: 'Socket.IO', icon: '/icons/socketio-original.svg', tag: 'Real-time' },
+  { name: 'Vercel', icon: '/icons/vercel-original.svg', tag: 'Deployment' },
 ]
 
-const proficiencies = [
-  { name: 'React & Next.js', level: 90 },
-  { name: 'JavaScript / TypeScript', level: 88 },
-  { name: 'Node.js / Express', level: 85 },
-  { name: 'Tailwind CSS', level: 92 },
-  { name: 'PostgreSQL / MongoDB', level: 80 },
-  { name: 'Flutter / Dart', level: 75 },
-  { name: 'Python', level: 72 },
-  { name: 'Git & DevTools', level: 85 },
+const skillPillars = [
+  {
+    category: 'Mobile Product Engineering',
+    icon: Smartphone,
+    summary: 'Cross-platform mobile apps for iOS and Android with offline caching, local state architecture, and smooth native bridges.',
+    stack: ['Flutter', 'Dart', 'Supabase Mobile', 'FCM Push Notifications', 'Provider / Riverpod'],
+  },
+  {
+    category: 'Full-Stack Web Systems',
+    icon: Code2,
+    summary: 'Responsive, accessible frontend architectures backed by high-throughput RESTful APIs, JWT sessions, and relational models.',
+    stack: ['React 19', 'TypeScript', 'Node.js', 'Express.js', 'PostgreSQL', 'Tailwind CSS'],
+  },
+  {
+    category: 'AI Integration & Backend APIs',
+    icon: Cpu,
+    summary: 'Custom RAG search pipelines, Groq high-speed LLM integration, prompt engineering, and scalable webhook integrations.',
+    stack: ['Groq API', 'RAG Pipelines', 'Vector Indexing', 'Python / Flask', 'Socket.IO WebSockets'],
+  },
+  {
+    category: 'Database & Infrastructure',
+    icon: Database,
+    summary: 'Strict ACID compliance, Row-Level Security (RLS) policies, schema migrations, and optimized indexing strategies.',
+    stack: ['PostgreSQL', 'Supabase RLS', 'MongoDB', 'Redis Caching', 'Postman Automated Tests'],
+  },
 ]
-
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-}
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-24">
+    <section id="skills" className="py-24 border-t border-border/60">
       <div className="max-w-6xl mx-auto px-6">
+        
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-16"
+          className="max-w-2xl mb-12"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-primary" />
-            <span className="text-sm font-semibold text-primary uppercase tracking-widest">Tech Stack</span>
+          <div className="flex items-center gap-2 text-muted-foreground font-mono text-xs uppercase tracking-widest mb-3">
+            <span className="w-6 h-[1.5px] bg-foreground" />
+            <span>Technical Capabilities</span>
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
-            Skills & <span className="gradient-text">Technologies</span>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+            Technologies & <span className="gradient-text">Engineering Stack</span>
           </h2>
-          <p className="text-muted-foreground max-w-xl">
-            A curated set of technologies I use to build robust, performant applications.
+          <p className="text-muted-foreground text-sm mt-3 leading-relaxed">
+            Modern, production-proven tools I use to architect robust mobile applications, full-stack web platforms, and AI-enabled systems.
           </p>
         </motion.div>
 
-        {/* Skill categories */}
-        <div className="space-y-12">
-          {categories.map((cat) => (
-            <motion.div
-              key={cat.label}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-40px' }}
-              variants={containerVariants}
-            >
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-5">
-                {cat.label}
-              </h3>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-                {cat.items.map((skill) => (
-                  <motion.div
-                    key={skill.name}
-                    variants={itemVariants}
-                    className="group flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:border-primary/30 hover:shadow-sm transition-all duration-300 cursor-default"
-                  >
-                    <img
-                      src={skill.icon}
-                      alt={skill.name}
-                      className="w-8 h-8 object-contain group-hover:scale-110 transition-transform duration-300"
-                      loading="lazy"
-                    />
-                    <span className="text-[11px] font-medium text-muted-foreground text-center leading-tight">
-                      {skill.name}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+        {/* ── 1. Contained Dual-Rail Infinite Marquee (Matched to Column Grid) ── */}
+        <div className="relative rounded-3xl glass-panel border border-border/80 p-6 overflow-hidden marquee-container mb-16 shadow-xs">
+          {/* Internal left & right gradient fade masks */}
+          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-card via-card/80 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-card via-card/80 to-transparent z-10 pointer-events-none" />
+
+          <div className="space-y-3">
+            {/* Row 1: Leftward continuous scroll */}
+            <div className="animate-marquee-left flex items-center gap-3">
+              {[...marqueeRow1, ...marqueeRow1, ...marqueeRow1].map((tech, idx) => (
+                <div
+                  key={`row1-${idx}`}
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-secondary/80 border border-border/70 shrink-0 select-none hover:border-foreground/40 transition-colors"
+                >
+                  <img src={tech.icon} alt={tech.name} className="w-4 h-4 object-contain" />
+                  <div className="text-left">
+                    <p className="text-xs font-mono font-semibold text-foreground whitespace-nowrap">{tech.name}</p>
+                    <p className="text-[10px] font-mono text-muted-foreground whitespace-nowrap">{tech.tag}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Row 2: Rightward continuous scroll */}
+            <div className="animate-marquee-right flex items-center gap-3">
+              {[...marqueeRow2, ...marqueeRow2, ...marqueeRow2].map((tech, idx) => (
+                <div
+                  key={`row2-${idx}`}
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-secondary/80 border border-border/70 shrink-0 select-none hover:border-foreground/40 transition-colors"
+                >
+                  <img src={tech.icon} alt={tech.name} className="w-4 h-4 object-contain" />
+                  <div className="text-left">
+                    <p className="text-xs font-mono font-semibold text-foreground whitespace-nowrap">{tech.name}</p>
+                    <p className="text-[10px] font-mono text-muted-foreground whitespace-nowrap">{tech.tag}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Technical Proficiency */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mt-16"
-        >
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">
-            Technical Proficiency
-          </h3>
-          <div className="grid sm:grid-cols-2 gap-x-8 gap-y-5">
-            {proficiencies.map((p, i) => (
+        {/* ── 2. Structured Architectural Capability Cards ── */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {skillPillars.map((pillar, i) => {
+            const Icon = pillar.icon
+            return (
               <motion.div
-                key={p.name}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                key={pillar.category}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="p-7 rounded-3xl glass-panel glow-card flex flex-col justify-between border border-border/70 hover:border-foreground/30"
               >
-                <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-sm font-medium text-foreground">{p.name}</span>
-                  <span className="text-xs text-muted-foreground">{p.level}%</span>
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-10 h-10 rounded-2xl bg-secondary flex items-center justify-center text-foreground border border-border/80">
+                      <Icon size={18} />
+                    </div>
+                    <span className="text-[11px] font-mono text-muted-foreground uppercase tracking-wider">
+                      Domain 0{i + 1}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display text-lg font-bold text-foreground mb-2">
+                    {pillar.category}
+                  </h3>
+
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+                    {pillar.summary}
+                  </p>
                 </div>
-                <div className="h-2 rounded-full bg-secondary overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${p.level}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: 0.2 + i * 0.05, ease: 'easeOut' }}
-                    className="h-full rounded-full bg-gradient-to-r from-primary to-accent"
-                  />
+
+                <div className="pt-4 border-t border-border/50">
+                  <div className="flex flex-wrap gap-1.5">
+                    {pillar.stack.map((item) => (
+                      <span
+                        key={item}
+                        className="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-secondary/80 text-foreground/90 border border-border/60"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
-            ))}
-          </div>
-        </motion.div>
+            )
+          })}
+        </div>
 
-        {/* Other skills */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mt-12"
-        >
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-5">
-            Other Skills
-          </h3>
-          <div className="flex flex-wrap gap-2.5">
-            {otherSkills.map((s) => (
-              <span
-                key={s}
-                className="px-3.5 py-1.5 text-sm font-medium rounded-lg border border-border bg-secondary/50 text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
-              >
-                {s}
-              </span>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   )
