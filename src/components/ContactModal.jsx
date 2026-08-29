@@ -55,13 +55,13 @@ export default function ContactModal() {
 
     try {
       await emailjs.send(
-        'service_0mflr5h',
-        'template_1g8a9qf',
+        'service_x19apia',
+        'template_gb2zmgq',
         {
-          name: formData.name,
-          email: formData.email,
+          from_name: formData.name,
+          from_email: formData.email,
           message: formData.message,
-          subject: 'Contact from ' + formData.name,
+          subject: 'Portfolio Contact from ' + formData.name,
         },
         'kJx5ZWCc_2G3nQys2'
       )
