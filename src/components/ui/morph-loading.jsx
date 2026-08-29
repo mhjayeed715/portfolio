@@ -1,34 +1,49 @@
+import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 export default function UniqueLoading({
-  variant = 'morph',
   size = 'md',
   className,
 }) {
   const containerSizes = {
-    sm: 'w-16 h-16',
-    md: 'w-24 h-24',
-    lg: 'w-32 h-32',
+    sm: 'w-12 h-12',
+    md: 'w-16 h-16',
+    lg: 'w-20 h-20',
   }
 
-  if (variant === 'morph') {
-    return (
-      <div className={cn('relative', containerSizes[size] || containerSizes.md, className)}>
-        <div className="absolute inset-0 flex items-center justify-center">
-          {[0, 1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="absolute w-4 h-4 bg-primary dark:bg-accent rounded-sm shadow-sm transition-colors duration-300"
-              style={{
-                animation: `morph-${i} 2s infinite ease-in-out`,
-                animationDelay: `${i * 0.2}s`,
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    )
-  }
+  const dotPositions = [
+    { x: -10, y: -10 },
+    { x: 10, y: -10 },
+    { x: 10, y: 10 },
+    { x: -10, y: 10 },
+  ]
 
-  return null
+  return (
+    <div className={cn('relative flex items-center justify-center', containerSizes[size] || containerSizes.md, className)}>
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: 'linear' }}
+        className="relative w-8 h-8 flex items-center justify-center"
+      >
+        {dotPositions.map((pos, i) => (
+          <motion.div
+            key={i}
+            animate={{
+              x: [pos.x, pos.x * 1.3, pos.x],
+              y: [pos.y, pos.y * 1.3, pos.y],
+              scale: [1, 1.25, 1],
+              borderRadius: ['4px', '8px', '4px'],
+            }}
+            transition={{
+              duration: 1.6,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: i * 0.18,
+            }}
+            className="absolute w-3.5 h-3.5 bg-foreground rounded-sm shadow-xs"
+          />
+        ))}
+      </motion.div>
+    </div>
+  )
 }
