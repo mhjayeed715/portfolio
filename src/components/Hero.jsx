@@ -97,13 +97,13 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center hero-grid overflow-hidden pt-28 pb-16">
+    <section className="relative min-h-[100dvh] flex items-center hero-grid overflow-hidden pt-20 sm:pt-28 pb-12 sm:pb-16">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 -left-32 w-[550px] h-[550px] bg-foreground/[0.02] dark:bg-white/[0.02] rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/4 -right-32 w-[550px] h-[550px] bg-foreground/[0.02] dark:bg-white/[0.02] rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="relative max-w-6xl mx-auto px-6 w-full">
-        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-16 items-center">
+      <div className="relative max-w-6xl mx-auto px-5 sm:px-6 w-full">
+        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-8 sm:gap-12 lg:gap-16 items-center">
           
           {/* Left Column — Text & CTAs */}
           <div>
@@ -112,13 +112,13 @@ export default function Hero() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-border bg-secondary/80 mb-5 backdrop-blur-md"
+              className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-border bg-secondary/80 mb-3 sm:mb-5 backdrop-blur-md"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <span className="text-xs font-mono font-medium text-foreground">
+              <span className="text-[11px] sm:text-xs font-mono font-medium text-foreground">
                 Available for opportunities
               </span>
             </motion.div>
@@ -128,19 +128,19 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.08] mb-4 text-foreground"
+              className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.12] sm:leading-[1.08] mb-3 sm:mb-4 text-foreground"
             >
               Building <span className="gradient-text">Scalable Software</span> & Mobile MVPs.
             </motion.h1>
 
-            {/* Typewriter role — Fixed height container to completely prevent layout shift */}
+            {/* Typewriter role — Locked height to guarantee zero layout shift */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex items-center gap-2.5 mb-5 font-mono text-sm sm:text-base md:text-lg text-foreground/85 font-medium h-8 sm:h-9"
+              className="flex items-center gap-2 mb-4 sm:mb-5 font-mono text-sm sm:text-base md:text-lg text-foreground/85 font-medium h-7 sm:h-8"
             >
-              <Terminal size={18} className="shrink-0 text-muted-foreground" />
+              <Terminal size={16} className="shrink-0 text-muted-foreground" />
               <span className="whitespace-nowrap overflow-visible">{typedRole}</span>
               <span className="inline-block w-2 h-4 sm:h-5 bg-foreground animate-pulse shrink-0" />
             </motion.div>
@@ -150,7 +150,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-base text-muted-foreground leading-relaxed max-w-lg mb-8"
+              className="text-xs sm:text-base text-muted-foreground leading-relaxed max-w-lg mb-5 sm:mb-8"
             >
               I turn early-stage ideas into dependable iOS, Android, and web products that are clear to use, robust to build, and ready to launch.
             </motion.p>
@@ -160,7 +160,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-wrap items-center gap-3 mb-10"
+              className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-6 sm:mb-10"
             >
               <a
                 href="#projects"
@@ -169,40 +169,40 @@ export default function Hero() {
                   const el = document.querySelector('#projects')
                   if (el) window.lenis ? window.lenis.scrollTo(el, { offset: -70 }) : el.scrollIntoView({ behavior: 'smooth' })
                 }}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-foreground text-background font-semibold text-sm hover:opacity-90 transition-all duration-200 cursor-pointer shadow-sm"
+                className="inline-flex items-center gap-1.5 px-4.5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-foreground text-background font-semibold text-xs sm:text-sm hover:opacity-90 transition-all duration-200 cursor-pointer shadow-sm"
               >
                 <span>Explore Projects</span>
-                <ArrowUpRight size={16} />
+                <ArrowUpRight size={15} />
               </a>
 
               <a
                 href="/SM_Mehrab_Hossain_Jayeed_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border bg-card/70 backdrop-blur-md text-foreground font-medium text-sm hover:bg-secondary transition-all duration-200 cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl border border-border bg-card/70 backdrop-blur-md text-foreground font-medium text-xs sm:text-sm hover:bg-secondary transition-all duration-200 cursor-pointer"
               >
-                <FileDown size={15} />
+                <FileDown size={14} />
                 <span>Resume</span>
               </a>
 
-              <div className="flex items-center gap-2 ml-1">
+              <div className="flex items-center gap-1.5 ml-0.5">
                 <a
                   href="https://github.com/mhjayeed715"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 rounded-xl border border-border bg-card/70 text-muted-foreground hover:text-foreground transition-colors"
+                  className="p-2.5 sm:p-3 rounded-xl border border-border bg-card/70 text-muted-foreground hover:text-foreground transition-colors"
                   aria-label="GitHub Profile"
                 >
-                  <GitHubIcon className="w-4 h-4" />
+                  <GitHubIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </a>
                 <a
                   href="https://linkedin.com/in/mhjayeed715"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 rounded-xl border border-border bg-card/70 text-muted-foreground hover:text-foreground transition-colors"
+                  className="p-2.5 sm:p-3 rounded-xl border border-border bg-card/70 text-muted-foreground hover:text-foreground transition-colors"
                   aria-label="LinkedIn Profile"
                 >
-                  <LinkedInIcon className="w-4 h-4" />
+                  <LinkedInIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </a>
               </div>
             </motion.div>
@@ -212,15 +212,15 @@ export default function Hero() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="grid grid-cols-3 gap-4 pt-6 border-t border-border/60 max-w-md"
+              className="grid grid-cols-3 gap-3 sm:gap-4 pt-4 sm:pt-6 border-t border-border/60 max-w-sm sm:max-w-md"
             >
               {heroStats.map((stat, i) => (
                 <div key={stat.label} className="text-left">
-                  <p className="font-display text-2xl font-bold text-foreground">
+                  <p className="font-display text-xl sm:text-2xl font-bold text-foreground">
                     <AnimatedCounter target={stat.value} duration={1.8 + i * 0.2} />
                     <span className="text-muted-foreground font-normal">{stat.suffix}</span>
                   </p>
-                  <p className="text-xs text-muted-foreground mt-0.5 font-medium">{stat.label}</p>
+                  <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5 font-medium">{stat.label}</p>
                 </div>
               ))}
             </motion.div>
@@ -231,7 +231,7 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col items-center lg:items-end justify-center"
+            className="flex flex-col items-center lg:items-end justify-center mt-2 lg:mt-0"
           >
             <div
               ref={visualRef}
@@ -243,9 +243,9 @@ export default function Hero() {
               }}
             >
               {/* Circular Avatar Container with Offset Shadow Disc */}
-              <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80">
+              <div className="relative w-52 h-52 sm:w-68 sm:h-68 lg:w-80 lg:h-80">
                 {/* Circular Offset Solid Shadow Disc */}
-                <div className="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-full bg-zinc-900/90 dark:bg-zinc-800 border border-zinc-950/20 dark:border-white/10" />
+                <div className="absolute inset-0 translate-x-2 translate-y-2 sm:translate-x-2.5 sm:translate-y-2.5 rounded-full bg-zinc-900/90 dark:bg-zinc-800 border border-zinc-950/20 dark:border-white/10" />
 
                 {/* Main Circular Portrait Container */}
                 <div className="relative w-full h-full rounded-full overflow-hidden bg-card border-2 border-foreground dark:border-white shadow-xl">
@@ -258,17 +258,17 @@ export default function Hero() {
                 </div>
 
                 {/* Top-Left Overlapping Badge (Rounded Pill) */}
-                <div className="absolute -top-1.5 -left-2 z-10 px-3.5 py-1 rounded-full bg-background border border-foreground dark:border-white text-foreground text-xs font-mono font-bold shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.8)] select-none">
+                <div className="absolute -top-1 -left-1 sm:-top-1.5 sm:-left-2 z-10 px-2.5 py-0.5 sm:px-3.5 sm:py-1 rounded-full bg-background border border-foreground dark:border-white text-foreground text-[10px] sm:text-xs font-mono font-bold shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.8)] select-none">
                   <span>Building interpretably</span>
                 </div>
               </div>
 
               {/* Text Block clearly separated below the circular photo (No Overlap) */}
-              <div className="mt-8 text-center lg:text-left w-full">
-                <h3 className="font-display font-bold text-xl text-foreground tracking-tight">
+              <div className="mt-5 sm:mt-8 text-center lg:text-left w-full">
+                <h3 className="font-display font-bold text-lg sm:text-xl text-foreground tracking-tight">
                   S. M. Mehrab Hossain Jayeed
                 </h3>
-                <p className="text-xs font-mono text-muted-foreground mt-1">
+                <p className="text-[11px] sm:text-xs font-mono text-muted-foreground mt-1">
                   Full-Stack & Mobile Engineer &rarr; React & Flutter
                 </p>
               </div>
@@ -279,7 +279,7 @@ export default function Hero() {
         </div>
 
         {/* Scroll down indicator */}
-        <div className="mt-14 flex justify-center">
+        <div className="mt-8 sm:mt-14 flex justify-center">
           <a
             href="#projects"
             onClick={(e) => {
