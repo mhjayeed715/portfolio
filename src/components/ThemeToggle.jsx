@@ -48,7 +48,7 @@ export default function ThemeToggle() {
     <button
       ref={btnRef}
       onClick={toggleTheme}
-      className="relative p-2 sm:p-2.5 rounded-full hover:bg-foreground/10 dark:hover:bg-white/10 text-muted-foreground hover:text-foreground transition-all duration-200 cursor-pointer group"
+      className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full liquid-glass flex items-center justify-center text-muted-foreground hover:text-foreground hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer shadow-lg border border-white/40 dark:border-white/10 group shrink-0"
       aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
@@ -61,7 +61,7 @@ export default function ThemeToggle() {
             exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Sun size={15} className="text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.4)]" />
+            <Sun size={16} className="text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.4)]" />
           </motion.div>
         ) : (
           <motion.div
@@ -71,7 +71,7 @@ export default function ThemeToggle() {
             exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Moon size={15} className="text-slate-700 dark:text-slate-300" />
+            <Moon size={16} className="text-slate-700 dark:text-slate-300" />
           </motion.div>
         )}
       </AnimatePresence>

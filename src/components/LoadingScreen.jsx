@@ -56,12 +56,12 @@ export default function LoadingScreen({ onComplete }) {
             opacity: 0.95,
             transition: { duration: 0.65, ease: [0.77, 0, 0.175, 1] },
           }}
-          className="fixed inset-0 w-full h-[100dvh] z-[100] flex flex-col items-center justify-center p-6 bg-background text-foreground select-none overflow-hidden"
+          className="fixed inset-0 w-screen h-[100dvh] z-[100] grid place-items-center p-6 bg-background text-foreground select-none overflow-hidden"
         >
           {/* Ambient background glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-foreground/[0.03] dark:bg-white/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
-          <div className="relative z-10 w-full max-w-xs sm:max-w-sm flex flex-col items-center text-center">
+          <div className="relative z-10 w-full max-w-xs sm:max-w-sm flex flex-col items-center justify-center text-center my-auto">
             {/* Morph Loader Card */}
             <motion.div
               initial={{ scale: 0.85, opacity: 0 }}

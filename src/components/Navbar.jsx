@@ -94,17 +94,21 @@ export default function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-4 sm:top-5 left-0 right-0 z-50 flex justify-center px-3 sm:px-4 pointer-events-none"
+      className="fixed top-4 sm:top-5 inset-x-0 z-50 flex items-center justify-between px-3.5 sm:px-6 pointer-events-none"
     >
+      {/* 1. Left Optical Balance Spacer (Equal width to right ThemeToggle for 100% dead center alignment) */}
+      <div className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 opacity-0 pointer-events-none" aria-hidden="true" />
+
+      {/* 2. Centered Capsule Navbar */}
       <div
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="pointer-events-auto flex items-center gap-2 max-w-full"
+        className="pointer-events-auto flex items-center justify-center max-w-full"
       >
         <motion.nav
           layout
           transition={{ type: 'spring', stiffness: 220, damping: 28, mass: 0.8 }}
-          className="flex items-center gap-1.5 sm:gap-2 py-1.5 sm:py-2 px-2 sm:px-3 rounded-full liquid-glass transition-all duration-300 shadow-xl"
+          className="flex items-center gap-1.5 sm:gap-2 py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-full liquid-glass transition-all duration-300 shadow-xl"
         >
           {/* Round Profile Picture + Name Pill */}
           <a
@@ -176,11 +180,6 @@ export default function Navbar() {
             )}
           </AnimatePresence>
 
-          {/* Integrated Theme Toggle (inside the centered capsule for perfect symmetry on all screens) */}
-          <div className="shrink-0 flex items-center pl-0.5">
-            <ThemeToggle />
-          </div>
-
           {/* Mobile hamburger button */}
           <button
             onClick={() => setOpen(!open)}
@@ -190,6 +189,11 @@ export default function Navbar() {
             {open ? <X size={16} /> : <Menu size={16} />}
           </button>
         </motion.nav>
+      </div>
+
+      {/* 3. Right Floating Theme Toggle (Independent Liquid-Glass Circle) */}
+      <div className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 pointer-events-auto flex items-center justify-center">
+        <ThemeToggle />
       </div>
 
       {/* Mobile Dropdown Drawer with Backdrop Overlay */}

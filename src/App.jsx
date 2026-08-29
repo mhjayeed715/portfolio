@@ -33,25 +33,27 @@ export default function App() {
   }, [])
 
   return (
-    <SmoothScroll>
+    <>
       <LoadingScreen onComplete={() => setLoadingComplete(true)} />
-      <div className="bg-background text-foreground min-h-screen flex flex-col selection:bg-primary/20 selection:text-foreground">
-        <Navbar />
-        <main className="flex-1">
-          <Hero />
-          <About />
-          <Projects />
-          <Skills />
-          <Services />
-          <Achievements />
-          <Philosophy />
-          <Education />
-          <Contact />
-        </main>
-        <Footer />
-        <ScrollToTop />
-        <ContactModal />
-      </div>
-    </SmoothScroll>
+      <SmoothScroll>
+        <div className="bg-background text-foreground min-h-screen flex flex-col selection:bg-primary/20 selection:text-foreground">
+          <Navbar />
+          <main className="flex-1">
+            <Hero />
+            <About />
+            <Projects />
+            <Skills />
+            <Services />
+            <Achievements />
+            <Philosophy />
+            <Education />
+            <Contact />
+          </main>
+          <Footer />
+          <ScrollToTop />
+          <ContactModal />
+        </div>
+      </SmoothScroll>
+    </>
   )
 }
