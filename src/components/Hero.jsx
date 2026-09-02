@@ -253,6 +253,9 @@ export default function Hero() {
                   <img
                     src="/profile21.png"
                     alt="S. M. Mehrab Hossain Jayeed"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
                     className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
                   />
                 </div>

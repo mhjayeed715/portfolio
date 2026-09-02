@@ -59,7 +59,7 @@ export default function About() {
           >
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-secondary text-muted-foreground text-xs font-mono font-medium border border-border/60">
-                <span>Final-Year BSc CSE · Shanto-Mariam University</span>
+                <span>Final-Year BSc CSE · Shanto-Mariam University of Creative Technology</span>
               </div>
               <h3 className="font-display text-2xl font-bold text-foreground">
                 Software Engineer with an AI-Augmented Workflow

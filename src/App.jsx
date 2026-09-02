@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import SmoothScroll from './components/SmoothScroll'
 import LoadingScreen from './components/LoadingScreen'
 import Navbar from './components/Navbar'
@@ -32,9 +33,19 @@ export default function App() {
     return () => document.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
+  const handleLoadingComplete = () => {
+    setLoadingComplete(true)
+    if (window.lenis) {
+      window.lenis.start()
+      window.lenis.resize()
+    }
+    // Refresh ScrollTrigger so all section positions reflect loaded asset heights
+    ScrollTrigger.refresh()
+  }
+
   return (
     <>
-      <LoadingScreen onComplete={() => setLoadingComplete(true)} />
+      <LoadingScreen onComplete={handleLoadingComplete} />
       <SmoothScroll>
         <div className="bg-background text-foreground min-h-screen flex flex-col selection:bg-primary/20 selection:text-foreground">
           <Navbar />

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import UniqueLoading from '@/components/ui/morph-loading'
 
@@ -9,25 +9,136 @@ const loadingSteps = [
   'Welcome to Jayeed\'s Portfolio',
 ]
 
+// Critical visible/above-the-fold assets that must be preloaded & decoded
+const CRITICAL_ASSETS = [
+  '/profile21.png',
+  '/projects/unisharesync_mobile.png',
+  '/education/shanto-mariam.svg',
+]
+
+function preloadImage(url) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.src = url
+    if (img.complete) {
+      if ('decode' in img) {
+        img.decode().then(resolve).catch(resolve)
+      } else {
+        resolve()
+      }
+    } else {
+      img.onload = () => {
+        if ('decode' in img) {
+          img.decode().then(resolve).catch(resolve)
+        } else {
+          resolve()
+        }
+      }
+      img.onerror = resolve
+    }
+  })
+}
+
+function waitForDomImages() {
+  const images = Array.from(document.querySelectorAll('img'))
+  if (images.length === 0) return Promise.resolve()
+  return Promise.all(
+    images.map((img) => {
+      if (img.complete) {
+        return 'decode' in img ? img.decode().catch(() => {}) : Promise.resolve()
+      }
+      return new Promise((res) => {
+        img.addEventListener('load', () => {
+          if ('decode' in img) img.decode().catch(() => {}).then(res)
+          else res()
+        }, { once: true })
+        img.addEventListener('error', res, { once: true })
+      })
+    })
+  )
+}
+
 export default function LoadingScreen({ onComplete }) {
   const [progress, setProgress] = useState(0)
   const [stepIndex, setStepIndex] = useState(0)
   const [isFinished, setIsFinished] = useState(false)
+  const allLoadedRef = useRef(false)
 
   useEffect(() => {
-    // Progress counter animation
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval)
-          return 100
-        }
-        const increment = Math.floor(Math.random() * 9) + 5
-        return Math.min(prev + increment, 100)
-      })
-    }, 38)
+    // 1. Lock body scrolling and pause Lenis while loading
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    if (window.lenis) window.lenis.stop()
 
-    return () => clearInterval(interval)
+    // 2. Track real loading milestones
+    const windowLoadPromise = new Promise((resolve) => {
+      if (document.readyState === 'complete') {
+        resolve()
+      } else {
+        window.addEventListener('load', resolve, { once: true })
+      }
+    })
+
+    const fontsPromise = document.fonts && document.fonts.ready
+      ? document.fonts.ready.catch(() => {})
+      : Promise.resolve()
+
+    const criticalAssetsPromise = Promise.all(CRITICAL_ASSETS.map(preloadImage))
+    const domImagesPromise = waitForDomImages()
+
+    // Pacing: minimum 1.2s to experience UI smoothly, safety timeout 5.5s
+    const minTimePromise = new Promise((res) => setTimeout(res, 1200))
+    const safetyTimeoutPromise = new Promise((res) => setTimeout(res, 5500))
+
+    const realLoadPromise = Promise.all([
+      windowLoadPromise,
+      fontsPromise,
+      criticalAssetsPromise,
+      domImagesPromise,
+      minTimePromise,
+    ])
+
+    let isMounted = true
+
+    Promise.race([realLoadPromise, safetyTimeoutPromise]).then(() => {
+      if (isMounted) {
+        allLoadedRef.current = true
+      }
+    })
+
+    // 3. Smooth animated progress loop
+    let currentVal = 0
+    const interval = setInterval(() => {
+      if (!isMounted) return
+
+      if (!allLoadedRef.current) {
+        // Smoothly approach 88% while assets load
+        if (currentVal < 88) {
+          const step = Math.max(1, Math.floor((88 - currentVal) * 0.14))
+          currentVal = Math.min(88, currentVal + step)
+          setProgress(currentVal)
+        }
+      } else {
+        // Once all assets, window.onload, and fonts are confirmed ready:
+        if (currentVal < 100) {
+          const step = Math.max(2, Math.floor((100 - currentVal) * 0.35) + 3)
+          currentVal = Math.min(100, currentVal + step)
+          setProgress(currentVal)
+        } else {
+          clearInterval(interval)
+        }
+      }
+    }, 28)
+
+    return () => {
+      isMounted = false
+      clearInterval(interval)
+      document.body.style.overflow = originalOverflow
+      if (window.lenis) {
+        window.lenis.start()
+        window.lenis.resize()
+      }
+    }
   }, [])
 
   useEffect(() => {

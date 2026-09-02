@@ -126,6 +126,8 @@ export default function Navbar() {
               <img
                 src="/profile21.png"
                 alt="Jayeed"
+                loading="eager"
+                decoding="async"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform"
               />
             </div>
