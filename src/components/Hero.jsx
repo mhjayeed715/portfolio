@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
-import { ArrowDown, ArrowUpRight, FileDown, Terminal } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, FileDown, Terminal, Briefcase } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 
 const GitHubIcon = ({ className }) => (
@@ -67,7 +67,7 @@ function useTypewriter(texts, typingSpeed = 70, deletingSpeed = 40, pauseTime = 
 }
 
 const heroStats = [
-  { value: 8, suffix: '+', label: 'Projects' },
+  { value: 9, suffix: '+', label: 'Projects' },
   { value: 20, suffix: '+', label: 'Technologies' },
   { value: 3, suffix: '+', label: 'Years Coding' },
 ]
@@ -79,7 +79,7 @@ const roles = [
   'AI-Assisted Engineer',
 ]
 
-export default function Hero() {
+export default function Hero({ isMinimalMode, onToggleMinimalMode }) {
   const typedRole = useTypewriter(roles)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const visualRef = useRef(null)
@@ -107,21 +107,43 @@ export default function Hero() {
           
           {/* Left Column — Text & CTAs */}
           <div>
-            {/* Availability Status Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-border bg-secondary/80 mb-3 sm:mb-5 backdrop-blur-md"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
-              <span className="text-[11px] sm:text-xs font-mono font-medium text-foreground">
-                Available for opportunities
-              </span>
-            </motion.div>
+            {/* Availability Status Badge & Recruiter View Shortcut */}
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mb-3 sm:mb-5">
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-border bg-secondary/80 backdrop-blur-md"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span className="text-[11px] sm:text-xs font-mono font-medium text-foreground">
+                  Available for opportunities
+                </span>
+              </motion.div>
+
+              {onToggleMinimalMode && (
+                <motion.button
+                  type="button"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.08 }}
+                  onClick={onToggleMinimalMode}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 sm:px-3 sm:py-1.5 rounded-full border text-[11px] sm:text-xs font-mono transition-all duration-200 cursor-pointer shadow-2xs ${
+                    isMinimalMode
+                      ? 'bg-foreground text-background border-foreground font-semibold shadow-xs'
+                      : 'bg-card/80 hover:bg-secondary text-muted-foreground hover:text-foreground border-border/80'
+                  }`}
+                  title="Recruiter Mode: Show only core essential sections (About · Work · Services · Contact)"
+                >
+                  <Briefcase size={12} className={isMinimalMode ? 'text-background' : 'text-primary'} />
+                  <span>{isMinimalMode ? 'Recruiter View: Active' : 'Recruiter View · 2-Min Read'}</span>
+                  <span className={`w-1.5 h-1.5 rounded-full ${isMinimalMode ? 'bg-emerald-400 animate-pulse' : 'bg-muted-foreground/40'}`} />
+                </motion.button>
+              )}
+            </div>
 
             {/* Headline */}
             <motion.h1

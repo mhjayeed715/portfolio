@@ -8,11 +8,11 @@ const GitHubIcon = ({ className }) => (
   </svg>
 )
 
-const categories = [
-  { id: 'all', label: 'All Projects', count: 8, icon: Layers },
-  { id: 'mobile', label: 'Mobile Apps', count: 2, icon: Smartphone },
-  { id: 'web', label: 'Full-Stack Web', count: 4, icon: Globe },
-  { id: 'ai', label: 'AI & Systems', count: 2, icon: Cpu },
+const categoryDefs = [
+  { id: 'all', label: 'All Projects', icon: Layers },
+  { id: 'mobile', label: 'Mobile Apps', icon: Smartphone },
+  { id: 'web', label: 'Full-Stack Web', icon: Globe },
+  { id: 'ai', label: 'AI & Systems', icon: Cpu },
 ]
 
 const projects = [
@@ -57,6 +57,26 @@ const projects = [
   },
   {
     id: 3,
+    title: 'Double Gap Index (DGI)',
+    category: 'ai',
+    subtitle: 'Interpretable Policy Intelligence Framework',
+    award: 'Empirical Policy AI · 64 Districts',
+    description:
+      'Interpretable policy intelligence platform empirically mapping compounded digital exclusion and physical service access gaps across all 64 districts of Bangladesh. Built with Next.js 15, Python ML pipeline (K-Means & SHAP attribution), MapLibre GL GIS vectors, and Supabase.',
+    highlights: ['Next.js 15 & Supabase', 'Python ETL & ML', 'MapLibre Vector GIS', 'K-Means & SHAP', 'Two Scores Axiom'],
+    image: '/projects/DoubleGapIndex.png',
+    tech: [
+      { name: 'React', icon: '/icons/react-original.svg' },
+      { name: 'Python', icon: '/icons/python-original.svg' },
+      { name: 'TypeScript', icon: '/icons/typescript-original.svg' },
+      { name: 'Supabase', icon: '/icons/supabase-original.svg' },
+      { name: 'PostgreSQL', icon: '/icons/postgresql-original.svg' },
+    ],
+    github: 'https://github.com/mhjayeed715/Double-Gap-Index-DGI',
+    live: 'https://doublegapindex.vercel.app/',
+  },
+  {
+    id: 4,
     title: 'GigCampus',
     category: 'web',
     subtitle: 'Campus Micro-Task Marketplace',
@@ -74,7 +94,7 @@ const projects = [
     live: 'https://gigcampus-7er7.onrender.com/',
   },
   {
-    id: 4,
+    id: 5,
     title: 'UniShareSync Web App',
     category: 'web',
     subtitle: 'Academic Resource Platform',
@@ -92,7 +112,7 @@ const projects = [
     live: 'https://unisharesyncweb.vercel.app/',
   },
   {
-    id: 5,
+    id: 6,
     title: 'Servyn',
     category: 'mobile',
     subtitle: 'On-Demand Local Service Booking',
@@ -108,7 +128,7 @@ const projects = [
     github: 'https://github.com/mhjayeed715/servyn',
   },
   {
-    id: 6,
+    id: 7,
     title: 'SkillVoyage',
     category: 'web',
     subtitle: 'Interactive Skill Roadmap & Goal Tracker',
@@ -126,7 +146,7 @@ const projects = [
     live: 'https://skillvoyage-frontend.vercel.app/',
   },
   {
-    id: 7,
+    id: 8,
     title: 'AI Drainage Optimizer',
     category: 'ai',
     subtitle: 'Predictive Urban Flooding Analytics',
@@ -140,7 +160,7 @@ const projects = [
     github: 'https://github.com/mhjayeed715/AI-Powered-Smart-Waterlogging-and-Drainage-Optimizer',
   },
   {
-    id: 8,
+    id: 9,
     title: 'UniShareSyncFX',
     category: 'ai',
     subtitle: 'Desktop Resource Client with Offline Cache',
@@ -159,6 +179,11 @@ const projects = [
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [expanded, setExpanded] = useState(false)
+
+  const categories = categoryDefs.map((cat) => ({
+    ...cat,
+    count: cat.id === 'all' ? projects.length : projects.filter((p) => p.category === cat.id).length,
+  }))
 
   // Filter logic
   const filteredList = activeCategory === 'all'
@@ -409,7 +434,7 @@ export default function Projects() {
               onClick={() => setExpanded(!expanded)}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl glass-panel border border-border/80 hover:border-foreground/30 text-xs font-mono font-semibold text-foreground transition-all duration-200 cursor-pointer shadow-xs"
             >
-              <span>{expanded ? 'Show Curated Highlights' : 'Explore All 8 Projects'}</span>
+              <span>{expanded ? 'Show Curated Highlights' : `Explore All ${projects.length} Projects`}</span>
               {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             </button>
           </div>

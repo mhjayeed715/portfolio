@@ -13,6 +13,7 @@ const loadingSteps = [
 const CRITICAL_ASSETS = [
   '/profile21.png',
   '/projects/unisharesync_mobile.png',
+  '/projects/DoubleGapIndex.png',
   '/education/shanto-mariam.svg',
 ]
 

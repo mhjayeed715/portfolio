@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ArrowUpRight } from 'lucide-react'
+import { Menu, X, ArrowUpRight, Briefcase, Sparkles } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 import { openContactModal } from './ContactModal'
 
-const navLinks = [
+const fullNavLinks = [
   { label: 'About', href: '#about' },
   { label: 'Work', href: '#projects' },
   { label: 'Skills', href: '#skills' },
@@ -12,7 +12,15 @@ const navLinks = [
   { label: 'Achievements', href: '#achievements' },
 ]
 
-export default function Navbar() {
+const minimalNavLinks = [
+  { label: 'About', href: '#about' },
+  { label: 'Work', href: '#projects' },
+  { label: 'Services', href: '#services' },
+  { label: 'Contact', href: '#contact' },
+]
+
+export default function Navbar({ isMinimalMode, onToggleMinimalMode }) {
+  const navLinks = isMinimalMode ? minimalNavLinks : fullNavLinks
   const [isCompact, setIsCompact] = useState(false)
   const [hovered, setHovered] = useState(false)
   const [open, setOpen] = useState(false)
@@ -99,11 +107,30 @@ export default function Navbar() {
       {/* Symmetrical 3-Column Flex Container */}
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between pointer-events-none">
         
-        {/* 1. Left Symmetrical Balance Spacer — Exactly 40x40px */}
-        <div
-          className="w-10 h-10 min-w-[40px] min-h-[40px] max-w-[40px] max-h-[40px] shrink-0 opacity-0 pointer-events-none"
-          aria-hidden="true"
-        />
+        {/* 1. Left Symmetrical Slot — Recruiter / Minimal View Toggle */}
+        <div className="w-10 h-10 min-w-[40px] min-h-[40px] max-w-[40px] max-h-[40px] shrink-0 flex items-center justify-center pointer-events-auto">
+          {onToggleMinimalMode && (
+            <button
+              type="button"
+              onClick={onToggleMinimalMode}
+              className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-md cursor-pointer border ${
+                isMinimalMode
+                  ? 'bg-foreground text-background border-foreground shadow-emerald-500/20'
+                  : 'liquid-glass text-foreground border-border/80 hover:bg-secondary'
+              }`}
+              aria-label={isMinimalMode ? 'Switch to Full Portfolio' : 'Switch to Recruiter / Minimal View'}
+              title={isMinimalMode ? 'Recruiter Mode Active (Showing About, Work, Services, Contact) — Click for Full Story' : 'Recruiter Mode: Short on time? View essential sections only (About, Work, Services, Contact)'}
+            >
+              {isMinimalMode ? <Sparkles size={16} /> : <Briefcase size={16} />}
+              {isMinimalMode && (
+                <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                </span>
+              )}
+            </button>
+          )}
+        </div>
 
         {/* 2. Center Capsule Navbar — True Mathematical Center */}
         <motion.nav
@@ -172,6 +199,25 @@ export default function Navbar() {
                     </a>
                   )
                 })}
+
+                {onToggleMinimalMode && (
+                  <div className="pl-1 shrink-0">
+                    <button
+                      type="button"
+                      onClick={onToggleMinimalMode}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono transition-all duration-200 cursor-pointer border shrink-0 ${
+                        isMinimalMode
+                          ? 'bg-foreground text-background border-foreground font-semibold shadow-xs'
+                          : 'bg-secondary/70 hover:bg-secondary text-muted-foreground hover:text-foreground border-border/60'
+                      }`}
+                      title={isMinimalMode ? 'Recruiter Mode Active — Click to show all 9 sections' : 'Recruiter View: Show only About, Work, Services, Contact'}
+                    >
+                      <Briefcase size={12} className={isMinimalMode ? 'text-background' : 'opacity-70'} />
+                      <span>{isMinimalMode ? 'Minimal' : 'Recruiter'}</span>
+                      <span className={`w-1.5 h-1.5 rounded-full ${isMinimalMode ? 'bg-emerald-400 animate-pulse' : 'bg-muted-foreground/30'}`} />
+                    </button>
+                  </div>
+                )}
 
                 <div className="pl-1.5 shrink-0">
                   <button
@@ -254,6 +300,34 @@ export default function Navbar() {
                     <ArrowUpRight size={14} />
                   </button>
                 </div>
+
+                {onToggleMinimalMode && (
+                  <div className="pt-2 border-t border-border/60">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onToggleMinimalMode()
+                        setOpen(false)
+                      }}
+                      className={`w-full flex items-center justify-between p-3 rounded-2xl border text-xs font-mono transition-colors cursor-pointer ${
+                        isMinimalMode
+                          ? 'bg-foreground text-background border-foreground font-semibold shadow-sm'
+                          : 'bg-secondary/70 text-foreground border-border/70 hover:bg-secondary'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Briefcase size={14} className={isMinimalMode ? 'text-background' : 'text-primary'} />
+                        <span>Recruiter View (Minimal)</span>
+                      </div>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${isMinimalMode ? 'bg-emerald-400 text-black' : 'bg-muted text-muted-foreground'}`}>
+                        {isMinimalMode ? 'ACTIVE' : 'OFF'}
+                      </span>
+                    </button>
+                    <p className="text-[10px] font-mono text-muted-foreground px-1 mt-1.5 text-center">
+                      {isMinimalMode ? 'Showing About · Work · Services · Contact' : 'Tap to show 4 essential sections only'}
+                    </p>
+                  </div>
+                )}
               </div>
             </motion.div>
           </>
