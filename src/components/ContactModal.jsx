@@ -55,15 +55,15 @@ export default function ContactModal() {
 
     try {
       await emailjs.send(
-        'service_x19apia',
-        'template_gb2zmgq',
+        import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_x19apia',
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_gb2zmgq',
         {
           from_name: formData.name,
           from_email: formData.email,
           message: formData.message,
           subject: 'Portfolio Contact from ' + formData.name,
         },
-        'kJx5ZWCc_2G3nQys2'
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'kJx5ZWCc_2G3nQys2'
       )
       setSent(true)
       setFormData({ name: '', email: '', message: '' })

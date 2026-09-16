@@ -190,21 +190,12 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          {/* Toggle between Sign In and Sign Up */}
+          {/* Security footnote */}
           <div className="mt-6 pt-5 border-t border-border/60 text-center">
-            <button
-              type="button"
-              onClick={() => {
-                setIsSignUp(!isSignUp)
-                setErrorMessage('')
-                setSuccessMessage('')
-              }}
-              className="text-xs text-muted-foreground hover:text-foreground font-mono transition-colors cursor-pointer"
-            >
-              {isSignUp
-                ? 'Already initialized? Sign in to existing account'
-                : 'First time setup? Create admin account'}
-            </button>
+            <p className="text-[11px] text-muted-foreground/80 font-mono flex items-center justify-center gap-1.5">
+              <Shield size={12} className="text-emerald-500" />
+              <span>Restricted Access · Authorized Portfolio Owner Only</span>
+            </p>
           </div>
 
         </div>
