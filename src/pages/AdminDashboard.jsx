@@ -14,6 +14,11 @@ import {
   ArrowDown,
   LogOut,
   Save,
+  Upload,
+  FileDown,
+  FileText,
+  Link2,
+  AlertCircle,
   CheckCircle2,
   Sparkles,
   Database,
@@ -59,6 +64,10 @@ export default function AdminDashboard() {
   const [editingProject, setEditingProject] = useState(null)
   const [isNewProject, setIsNewProject] = useState(false)
 
+  // Resume upload state
+  const [resumeUploading, setResumeUploading] = useState(false)
+  const [resumeFileName, setResumeFileName] = useState('')
+
   // Local form state for Skills, Services, Education, Settings
   const [skillsForm, setSkillsForm] = useState(skills)
   const [servicesForm, setServicesForm] = useState(services)
@@ -68,6 +77,70 @@ export default function AdminDashboard() {
   const showToast = (msg, type = 'success') => {
     setToast({ msg, type })
     setTimeout(() => setToast(null), 3200)
+  }
+
+  // Resume file upload handler
+  const handleResumeUpload = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (file.type !== 'application/pdf') {
+      showToast('Only PDF files are allowed for resume upload.', 'error')
+      return
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('Resume file must be under 5MB.', 'error')
+      return
+    }
+
+    setResumeUploading(true)
+    setResumeFileName(file.name)
+
+    try {
+      if (!supabase) {
+        showToast('Supabase not connected. Cannot upload files.', 'error')
+        setResumeUploading(false)
+        return
+      }
+
+      // Upload to Supabase Storage
+      const fileName = `resume_${Date.now()}.pdf`
+      const { data, error } = await supabase.storage
+        .from('portfolio-assets')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: true,
+          contentType: 'application/pdf',
+        })
+
+      if (error) {
+        // If bucket doesn't exist, try to create it
+        if (error.message?.includes('not found') || error.statusCode === 404) {
+          showToast('Storage bucket "portfolio-assets" not found. Please create it in Supabase Dashboard → Storage.', 'error')
+        } else {
+          showToast(`Upload failed: ${error.message}`, 'error')
+        }
+        setResumeUploading(false)
+        return
+      }
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('portfolio-assets')
+        .getPublicUrl(fileName)
+
+      if (urlData?.publicUrl) {
+        setSettingsForm((prev) => ({ ...prev, resumeUrl: urlData.publicUrl }))
+        showToast('Resume uploaded successfully!')
+      }
+    } catch (err) {
+      showToast(`Upload error: ${err.message}`, 'error')
+    } finally {
+      setResumeUploading(false)
+    }
   }
 
   const handleSignOut = async () => {
@@ -637,6 +710,98 @@ export default function AdminDashboard() {
                   className="w-full p-3 rounded-xl bg-secondary/50 border border-border/70 text-xs text-foreground outline-none"
                 />
               </div>
+            </div>
+
+            {/* Resume File Management Section */}
+            <div className="p-6 rounded-2xl liquid-glass border border-border/80 space-y-4">
+              <div className="flex items-center gap-2 mb-1">
+                <FileText size={16} className="text-foreground" />
+                <h3 className="text-sm font-display font-bold text-foreground tracking-tight">Resume / CV Management</h3>
+              </div>
+              <p className="text-[11px] font-mono text-muted-foreground -mt-2">
+                Upload a new resume PDF or set a custom URL. This controls the resume download button on Hero section.
+              </p>
+
+              {/* Current Resume Preview */}
+              {settingsForm.resumeUrl && settingsForm.resumeUrl !== '#' && (
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                  <FileDown size={16} className="text-emerald-500 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-medium">Current Resume</p>
+                    <p className="text-[10px] font-mono text-muted-foreground truncate">{settingsForm.resumeUrl}</p>
+                  </div>
+                  <a
+                    href={settingsForm.resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg text-emerald-500 hover:bg-emerald-500/20 transition-colors shrink-0"
+                    title="Preview current resume"
+                  >
+                    <ExternalLink size={14} />
+                  </a>
+                </div>
+              )}
+
+              {/* File Upload */}
+              <div>
+                <label className="text-xs font-mono text-muted-foreground block mb-1.5 font-medium">
+                  Upload New Resume (PDF, max 5MB)
+                </label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    onChange={handleResumeUpload}
+                    disabled={resumeUploading}
+                    className="hidden"
+                    id="resume-upload-input"
+                  />
+                  <label
+                    htmlFor="resume-upload-input"
+                    className={`flex items-center gap-2 w-full p-3 rounded-xl border-2 border-dashed cursor-pointer transition-all duration-200 ${
+                      resumeUploading
+                        ? 'border-foreground/40 bg-foreground/5'
+                        : 'border-border/80 bg-secondary/30 hover:border-foreground/50 hover:bg-secondary/60'
+                    }`}
+                  >
+                    {resumeUploading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-foreground/40 border-t-foreground rounded-full animate-spin" />
+                        <span className="text-xs font-mono text-muted-foreground">Uploading {resumeFileName}...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload size={16} className="text-muted-foreground" />
+                        <span className="text-xs font-mono text-muted-foreground">Click to select a PDF file</span>
+                      </>
+                    )}
+                  </label>
+                </div>
+              </div>
+
+              {/* Manual URL Input */}
+              <div>
+                <label className="text-xs font-mono text-muted-foreground block mb-1 font-medium flex items-center gap-1.5">
+                  <Link2 size={12} />
+                  Or set Resume URL manually
+                </label>
+                <input
+                  type="text"
+                  value={settingsForm.resumeUrl || ''}
+                  onChange={(e) => setSettingsForm({ ...settingsForm, resumeUrl: e.target.value })}
+                  placeholder="e.g. /SM_Mehrab_Hossain_Jayeed_Resume.pdf or https://..."
+                  className="w-full p-3 rounded-xl bg-secondary/50 border border-border/70 text-xs text-foreground outline-none font-mono"
+                />
+              </div>
+
+              {!supabaseConnected && (
+                <div className="flex items-start gap-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                  <AlertCircle size={14} className="text-amber-500 shrink-0 mt-0.5" />
+                  <p className="text-[10px] font-mono text-amber-600 dark:text-amber-400">
+                    Supabase not connected. File upload requires Supabase Storage. You can still set a manual URL path.
+                  </p>
+                </div>
+              )}
             </div>
 
             <button

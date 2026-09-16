@@ -178,7 +178,7 @@ export default function Hero({ isMinimalMode, onToggleMinimalMode }) {
               </a>
 
               <a
-                href="/SM_Mehrab_Hossain_Jayeed_Resume.pdf"
+                href={settings?.resumeUrl || '/SM_Mehrab_Hossain_Jayeed_Resume.pdf'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl border border-border bg-card/70 backdrop-blur-md text-foreground font-medium text-xs sm:text-sm hover:bg-secondary transition-all duration-200 cursor-pointer"

@@ -26,7 +26,7 @@ const strengths = [
 ]
 
 export default function About() {
-  const { projects } = usePortfolio()
+  const { settings, projects } = usePortfolio()
   return (
     <section id="about" className="py-24 section-alt">
       <div className="max-w-6xl mx-auto px-6">
@@ -66,11 +66,8 @@ export default function About() {
               <h3 className="font-display text-2xl font-bold text-foreground">
                 Software Engineer with an AI-Augmented Workflow
               </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                I am a full-stack and mobile engineer based in Dhaka, specializing in building high-performance MVPs and software ecosystems. My workflow bridges the gap between vision and execution: translating real-world requirements into structured architectures, leveraging AI tooling to accelerate delivery, and validating every line for security, performance, and code quality.
-              </p>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                Whether architecting university collaboration ecosystems like <strong className="text-foreground font-medium">UniShareSync</strong> (which won 2nd Place in the Software Project Showcase) or building cognitive student shields like <strong className="text-foreground font-medium">Focusnyx</strong>, I build products that solve real human challenges.
+              <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line">
+                {settings?.aboutBio || 'I am a full-stack and mobile engineer based in Dhaka, specializing in building high-performance MVPs and software ecosystems. My workflow bridges the gap between vision and execution: translating real-world requirements into structured architectures, leveraging AI tooling to accelerate delivery, and validating every line for security, performance, and code quality.'}
               </p>
             </div>
 
