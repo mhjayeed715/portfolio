@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ExternalLink, Layers, Smartphone, Globe, Cpu, ChevronDown, ChevronUp } from 'lucide-react'
+import { usePortfolio } from '../context/PortfolioContext'
+import { initialProjects } from '../data/initialPortfolioData'
 
 const GitHubIcon = ({ className }) => (
   <svg viewBox="0 0 24 24" className={className} fill="currentColor">
@@ -15,168 +17,10 @@ const categoryDefs = [
   { id: 'ai', label: 'AI & Systems', icon: Cpu },
 ]
 
-const projects = [
-  {
-    id: 1,
-    title: 'UniShareSync Mobile App',
-    category: 'mobile',
-    subtitle: 'Cross-Platform Campus Ecosystem',
-    award: '🏆 2nd Place Winner — Software Project Showcase 2026',
-    description:
-      'Unified university mobile ecosystem built with Flutter and Supabase. Features an AI Campus Assistant with Groq RAG querying, real-time collaborative whiteboards, bus transit tracking via OpenStreetMap, and QR event check-ins.',
-    highlights: ['Flutter & Supabase', 'AI RAG Assistant', 'Real-time Whiteboard', 'OpenStreetMap Transit', 'CampusShare P2P'],
-    image: '/projects/unisharesync_mobile.png',
-    tech: [
-      { name: 'Flutter', icon: '/icons/flutter-original.svg' },
-      { name: 'Dart', icon: '/icons/dart-original.svg' },
-      { name: 'Supabase', icon: '/icons/supabase-original.svg' },
-      { name: 'Postman', icon: '/icons/postman-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/UniShareSync-Mobile-App',
-    live: 'https://unisharesync.vercel.app/',
-    flagship: true,
-  },
-  {
-    id: 2,
-    title: 'Focusnyx',
-    category: 'web',
-    subtitle: 'Student Life OS & Cognitive Shield',
-    description:
-      'Full-stack productivity operating system and cognitive shield for neurodivergent learners. Combines Next.js 14, Chrome MV3 distraction blocker, and Win32 focus enforcement.',
-    highlights: ['Next.js 14 & Supabase', 'Chrome MV3 Extension', 'Win32 System Hooks', 'AI Behavioral Coach'],
-    image: '/projects/focusnyx.png',
-    tech: [
-      { name: 'React', icon: '/icons/react-original.svg' },
-      { name: 'TypeScript', icon: '/icons/typescript-original.svg' },
-      { name: 'Node.js', icon: '/icons/nodejs-original.svg' },
-      { name: 'Supabase', icon: '/icons/supabase-original.svg' },
-      { name: 'Python', icon: '/icons/python-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/Focusnyx',
-    live: 'https://focusnyx.vercel.app/',
-  },
-  {
-    id: 3,
-    title: 'Double Gap Index (DGI)',
-    category: 'ai',
-    subtitle: 'Interpretable Policy Intelligence Framework',
-    award: 'Empirical Policy AI · 64 Districts',
-    description:
-      'Interpretable policy intelligence platform empirically mapping compounded digital exclusion and physical service access gaps across all 64 districts of Bangladesh. Built with Next.js 15, Python ML pipeline (K-Means & SHAP attribution), MapLibre GL GIS vectors, and Supabase.',
-    highlights: ['Next.js 15 & Supabase', 'Python ETL & ML', 'MapLibre Vector GIS', 'K-Means & SHAP', 'Two Scores Axiom'],
-    image: '/projects/DoubleGapIndex.png',
-    tech: [
-      { name: 'React', icon: '/icons/react-original.svg' },
-      { name: 'Python', icon: '/icons/python-original.svg' },
-      { name: 'TypeScript', icon: '/icons/typescript-original.svg' },
-      { name: 'Supabase', icon: '/icons/supabase-original.svg' },
-      { name: 'PostgreSQL', icon: '/icons/postgresql-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/Double-Gap-Index-DGI',
-    live: 'https://doublegapindex.vercel.app/',
-  },
-  {
-    id: 4,
-    title: 'GigCampus',
-    category: 'web',
-    subtitle: 'Campus Micro-Task Marketplace',
-    description:
-      'Peer-to-peer campus task platform with verified student ID authentication, real-time Socket.IO chat, order lifecycle tracking, and automated ghosting detection.',
-    highlights: ['CS50x Capstone', 'Socket.IO Chat', 'Order Tracking', 'Ghosting Shield'],
-    image: '/projects/GigCampus.png',
-    tech: [
-      { name: 'Python', icon: '/icons/python-original.svg' },
-      { name: 'Flask', icon: '/icons/flask-original.svg' },
-      { name: 'SQLite', icon: '/icons/sqlite-original.svg' },
-      { name: 'Socket.IO', icon: '/icons/socketio-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/GigCampus',
-    live: 'https://gigcampus-7er7.onrender.com/',
-  },
-  {
-    id: 5,
-    title: 'UniShareSync Web App',
-    category: 'web',
-    subtitle: 'Academic Resource Platform',
-    description:
-      'Full-stack academic portal for resource sharing, event scheduling, and department collaboration with email OTP security and role-based access control.',
-    highlights: ['Email OTP Auth', 'RBAC Security', 'Real-time Sync', 'RESTful API'],
-    image: '/projects/unisharesync.png',
-    tech: [
-      { name: 'React', icon: '/icons/react-original.svg' },
-      { name: 'Node.js', icon: '/icons/nodejs-original.svg' },
-      { name: 'PostgreSQL', icon: '/icons/postgresql-original.svg' },
-      { name: 'Tailwind CSS', icon: '/icons/tailwindcss-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/UniShareSync',
-    live: 'https://unisharesyncweb.vercel.app/',
-  },
-  {
-    id: 6,
-    title: 'Servyn',
-    category: 'mobile',
-    subtitle: 'On-Demand Local Service Booking',
-    description:
-      'Flutter-based mobile application connecting verified service providers with local customers via phone OTP verification and automated SMS notifications.',
-    highlights: ['Phone OTP Auth', 'SMS Alerts', 'Provider Dashboard'],
-    image: '/projects/servyn.png',
-    tech: [
-      { name: 'Flutter', icon: '/icons/flutter-original.svg' },
-      { name: 'Dart', icon: '/icons/dart-original.svg' },
-      { name: 'Supabase', icon: '/icons/supabase-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/servyn',
-  },
-  {
-    id: 7,
-    title: 'SkillVoyage',
-    category: 'web',
-    subtitle: 'Interactive Skill Roadmap & Goal Tracker',
-    description:
-      'MERN stack application enabling learners to set progressive milestones, track metrics through interactive dashboards, and receive curated skill recommendations.',
-    highlights: ['Interactive Dashboards', 'JWT Sessions', 'Custom Roadmaps'],
-    image: '/projects/skillvoyage.png',
-    tech: [
-      { name: 'React', icon: '/icons/react-original.svg' },
-      { name: 'MongoDB', icon: '/icons/mongodb-original.svg' },
-      { name: 'Express.js', icon: '/icons/express-original.svg' },
-      { name: 'Node.js', icon: '/icons/nodejs-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/skillvoyage',
-    live: 'https://skillvoyage-frontend.vercel.app/',
-  },
-  {
-    id: 8,
-    title: 'AI Drainage Optimizer',
-    category: 'ai',
-    subtitle: 'Predictive Urban Flooding Analytics',
-    description:
-      'Machine learning model analyzing precipitation and urban terrain to predict waterlogging hotspots and assist municipal drainage planning.',
-    highlights: ['ML Predictive Pipeline', 'Terrain Modeling', 'Data Analytics'],
-    image: '/projects/ai-drainage.png',
-    tech: [
-      { name: 'Python', icon: '/icons/python-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/AI-Powered-Smart-Waterlogging-and-Drainage-Optimizer',
-  },
-  {
-    id: 9,
-    title: 'UniShareSyncFX',
-    category: 'ai',
-    subtitle: 'Desktop Resource Client with Offline Cache',
-    description:
-      'JavaFX desktop application with MySQL replication, local cache synchronization, and department communication tools.',
-    highlights: ['JavaFX Desktop UI', 'MySQL Replication', 'Offline Cache'],
-    image: '/projects/unisharesyncfx.png',
-    tech: [
-      { name: 'Java', icon: '/icons/java-original.svg' },
-      { name: 'MySQL', icon: '/icons/mysql-original.svg' },
-    ],
-    github: 'https://github.com/mhjayeed715/UniShareSyncFX',
-  },
-]
-
 export default function Projects() {
+  const { projects: contextProjects } = usePortfolio()
+  const projects = contextProjects && contextProjects.length > 0 ? contextProjects : initialProjects
+
   const [activeCategory, setActiveCategory] = useState('all')
   const [expanded, setExpanded] = useState(false)
 

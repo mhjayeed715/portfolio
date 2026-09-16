@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Code2, Cpu, Rocket, ShieldCheck } from 'lucide-react'
+import { usePortfolio } from '../context/PortfolioContext'
 
 const strengths = [
   {
@@ -25,6 +26,7 @@ const strengths = [
 ]
 
 export default function About() {
+  const { projects } = usePortfolio()
   return (
     <section id="about" className="py-24 section-alt">
       <div className="max-w-6xl mx-auto px-6">
@@ -74,7 +76,7 @@ export default function About() {
 
             <div className="mt-8 pt-6 border-t border-border/60 grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div>
-                <p className="font-display text-xl font-bold text-foreground">9+ Apps</p>
+                <p className="font-display text-xl font-bold text-foreground">{projects?.length || 9}+ Apps</p>
                 <p className="text-xs text-muted-foreground">Shipped & Live</p>
               </div>
               <div>

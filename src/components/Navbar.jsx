@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ArrowUpRight, Briefcase, Sparkles } from 'lucide-react'
+import { Menu, X, ArrowUpRight, Briefcase, Sparkles, Maximize2, Minimize2 } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 import { openContactModal } from './ContactModal'
 
@@ -107,7 +107,7 @@ export default function Navbar({ isMinimalMode, onToggleMinimalMode }) {
       {/* Symmetrical 3-Column Flex Container */}
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between pointer-events-none">
         
-        {/* 1. Left Symmetrical Slot — Recruiter / Minimal View Toggle */}
+        {/* 1. Left Symmetrical Slot — Meaningful Floating Minimal / Expand Toggle */}
         <div className="w-10 h-10 min-w-[40px] min-h-[40px] max-w-[40px] max-h-[40px] shrink-0 flex items-center justify-center pointer-events-auto">
           {onToggleMinimalMode && (
             <button
@@ -118,10 +118,23 @@ export default function Navbar({ isMinimalMode, onToggleMinimalMode }) {
                   ? 'bg-foreground text-background border-foreground shadow-emerald-500/20'
                   : 'liquid-glass text-foreground border-border/80 hover:bg-secondary'
               }`}
-              aria-label={isMinimalMode ? 'Switch to Full Portfolio' : 'Switch to Minimal View'}
-              title={isMinimalMode ? 'Minimal Mode Active (Showing About, Work, Services, Contact) — Click to expand all sections' : 'Minimal Mode: View essential sections only (About, Work, Services, Contact)'}
+              aria-label={isMinimalMode ? 'Expand to Full Portfolio (9 sections)' : 'Switch to Minimal View (4 essential sections)'}
+              title={
+                isMinimalMode
+                  ? 'Minimal Mode Active (About · Work · Services · Contact) — Click to expand all 9 sections'
+                  : 'Full Portfolio Active — Click to switch to Minimal View'
+              }
             >
-              {isMinimalMode ? <Sparkles size={16} /> : <Briefcase size={16} />}
+              <motion.div
+                key={isMinimalMode ? 'min-icon' : 'max-icon'}
+                initial={{ scale: 0.6, rotate: -25, opacity: 0 }}
+                animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                exit={{ scale: 0.6, rotate: 25, opacity: 0 }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                className="flex items-center justify-center"
+              >
+                {isMinimalMode ? <Maximize2 size={16} /> : <Minimize2 size={16} />}
+              </motion.div>
               {isMinimalMode && (
                 <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -199,25 +212,6 @@ export default function Navbar({ isMinimalMode, onToggleMinimalMode }) {
                     </a>
                   )
                 })}
-
-                {onToggleMinimalMode && (
-                  <div className="pl-1 shrink-0">
-                    <button
-                      type="button"
-                      onClick={onToggleMinimalMode}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono transition-all duration-200 cursor-pointer border shrink-0 ${
-                        isMinimalMode
-                          ? 'bg-foreground text-background border-foreground font-semibold shadow-xs'
-                          : 'bg-secondary/70 hover:bg-secondary text-muted-foreground hover:text-foreground border-border/60'
-                      }`}
-                      title={isMinimalMode ? 'Minimal Mode Active — Click to expand all 9 sections' : 'Click to return to Minimal view'}
-                    >
-                      <Briefcase size={12} className={isMinimalMode ? 'text-background' : 'opacity-70'} />
-                      <span>{isMinimalMode ? 'Minimal' : 'Expanded'}</span>
-                      <span className={`w-1.5 h-1.5 rounded-full ${isMinimalMode ? 'bg-emerald-400 animate-pulse' : 'bg-muted-foreground/30'}`} />
-                    </button>
-                  </div>
-                )}
 
                 <div className="pl-1.5 shrink-0">
                   <button

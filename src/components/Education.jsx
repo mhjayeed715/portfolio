@@ -1,37 +1,11 @@
 import { motion } from 'framer-motion'
 import { CalendarDays, MapPin, Award } from 'lucide-react'
-
-const schools = [
-  {
-    name: 'Shanto-Mariam University of Creative Technology',
-    degree: 'BSc in Computer Science & Engineering',
-    date: 'Expected 2026',
-    location: 'Dhaka, Bangladesh',
-    gpa: 'CGPA: 3.93 / 4.00',
-    detail: 'Current Semester: 10th',
-    logo: '/education/shanto-mariam.svg',
-  },
-  {
-    name: 'Dhaka City College',
-    degree: 'Higher Secondary Certificate (HSC)',
-    date: '2021',
-    location: 'Dhaka, Bangladesh',
-    gpa: 'GPA: 5.00 / 5.00',
-    detail: 'Science Group',
-    logo: '/education/dhaka-city-college.png',
-  },
-  {
-    name: 'Armanitola Govt. High School',
-    degree: 'Secondary School Certificate (SSC)',
-    date: '2019',
-    location: 'Dhaka, Bangladesh',
-    gpa: 'GPA: 5.00 / 5.00',
-    detail: 'Science Group',
-    logo: '/education/armanitola.jpg',
-  },
-]
+import { usePortfolio } from '../context/PortfolioContext'
+import { initialEducation } from '../data/initialPortfolioData'
 
 export default function Education() {
+  const { education: contextEducation } = usePortfolio()
+  const schools = contextEducation && contextEducation.length > 0 ? contextEducation : initialEducation
   return (
     <section id="education" className="py-24 section-alt">
       <div className="max-w-6xl mx-auto px-6">

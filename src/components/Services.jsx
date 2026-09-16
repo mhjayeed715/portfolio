@@ -1,52 +1,20 @@
 import { motion } from 'framer-motion'
 import { Globe, Smartphone, Database, Bot, ShieldCheck, Zap } from 'lucide-react'
+import { usePortfolio } from '../context/PortfolioContext'
+import { initialServices } from '../data/initialPortfolioData'
 
-const services = [
-  {
-    icon: Smartphone,
-    title: 'Mobile MVP Development',
-    description:
-      'Cross-platform iOS and Android apps with Flutter, Supabase, push alerts, and offline caching. From design specs to App Store & Play Store readiness.',
-    tags: ['Flutter', 'Dart', 'Supabase', 'Mobile UX'],
-  },
-  {
-    icon: Globe,
-    title: 'Full-Stack Web Engineering',
-    description:
-      'High-performance web applications built with React, Next.js, and Node.js. Clean REST/GraphQL APIs, real-time sync, and SEO-optimized architecture.',
-    tags: ['React', 'Node.js', 'PostgreSQL', 'Tailwind'],
-  },
-  {
-    icon: Bot,
-    title: 'AI Workflows & RAG Integration',
-    description:
-      'Building intelligent assistant features, semantic document search (RAG) with vector databases, and automated LLM pipelines using Groq & OpenAI APIs.',
-    tags: ['RAG Pipelines', 'Groq API', 'Prompt Eng', 'Vectors'],
-  },
-  {
-    icon: Database,
-    title: 'Database Architecture & APIs',
-    description:
-      'Normalized schema design, query optimization, indexing, and scalable RESTful endpoints with comprehensive error handling and logging.',
-    tags: ['PostgreSQL', 'MongoDB', 'Supabase', 'Redis'],
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Security, Auth & RBAC',
-    description:
-      'Enterprise-grade authentication architectures: JWT sessions, email/phone OTP verification, role-based access control, and sanitization.',
-    tags: ['JWT', 'OTP Auth', 'RBAC', 'Data Security'],
-  },
-  {
-    icon: Zap,
-    title: 'Performance & Optimization',
-    description:
-      'Lighthouse audits, bundle splitting, memory leak debugging, rendering performance optimization, and hardware-accelerated animations.',
-    tags: ['Vite', 'Turbopack', 'Web Vitals', 'Profiling'],
-  },
-]
+const serviceIconMap = {
+  Smartphone,
+  Globe,
+  Bot,
+  Database,
+  ShieldCheck,
+  Zap,
+}
 
 export default function Services() {
+  const { services: contextServices } = usePortfolio()
+  const services = contextServices && contextServices.length > 0 ? contextServices : initialServices
   return (
     <section id="services" className="py-24">
       <div className="max-w-6xl mx-auto px-6">
@@ -74,7 +42,7 @@ export default function Services() {
         {/* 3-Column Services Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((s, i) => {
-            const Icon = s.icon
+            const Icon = typeof s.icon === 'string' ? (serviceIconMap[s.icon] || Zap) : (s.icon || Zap)
             return (
               <motion.div
                 key={s.title}

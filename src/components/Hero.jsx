@@ -66,23 +66,23 @@ function useTypewriter(texts, typingSpeed = 70, deletingSpeed = 40, pauseTime = 
   return displayed
 }
 
-const heroStats = [
-  { value: 9, suffix: '+', label: 'Projects' },
-  { value: 20, suffix: '+', label: 'Technologies' },
-  { value: 3, suffix: '+', label: 'Years Coding' },
-]
-
-const roles = [
-  'Full-Stack Developer',
-  'Mobile MVP Architect',
-  'React & Flutter Specialist',
-  'AI-Assisted Engineer',
-]
+import { usePortfolio } from '../context/PortfolioContext'
 
 export default function Hero({ isMinimalMode, onToggleMinimalMode }) {
-  const typedRole = useTypewriter(roles)
+  const { settings, projects } = usePortfolio()
+  const currentRoles = settings?.heroRoles && settings.heroRoles.length > 0
+    ? settings.heroRoles
+    : ['Full-Stack Developer', 'Mobile MVP Architect', 'React & Flutter Specialist', 'AI-Assisted Engineer']
+
+  const typedRole = useTypewriter(currentRoles)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const visualRef = useRef(null)
+
+  const heroStats = [
+    { value: projects?.length || 9, suffix: '+', label: 'Projects' },
+    { value: 20, suffix: '+', label: 'Technologies' },
+    { value: 3, suffix: '+', label: 'Years Coding' },
+  ]
 
   const handleMouseMove = (e) => {
     if (!visualRef.current) return
@@ -120,7 +120,7 @@ export default function Hero({ isMinimalMode, onToggleMinimalMode }) {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                 </span>
                 <span className="text-[11px] sm:text-xs font-mono font-medium text-foreground">
-                  Available for opportunities
+                  {settings?.heroAvailability || 'Available for opportunities'}
                 </span>
               </motion.div>
 
@@ -174,7 +174,7 @@ export default function Hero({ isMinimalMode, onToggleMinimalMode }) {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="text-xs sm:text-base text-muted-foreground leading-relaxed max-w-lg mb-5 sm:mb-8"
             >
-              I turn early-stage ideas into dependable iOS, Android, and web products that are clear to use, robust to build, and ready to launch.
+              {settings?.heroSubtext || 'I turn early-stage ideas into dependable iOS, Android, and web products that are clear to use, robust to build, and ready to launch.'}
             </motion.p>
 
             {/* Action Buttons Row */}

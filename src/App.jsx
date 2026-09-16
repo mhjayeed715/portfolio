@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Briefcase, Sparkles } from 'lucide-react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { PortfolioProvider } from './context/PortfolioContext'
 import SmoothScroll from './components/SmoothScroll'
 import LoadingScreen from './components/LoadingScreen'
 import Navbar from './components/Navbar'
@@ -17,8 +19,11 @@ import Contact from './components/Contact'
 import ContactModal from './components/ContactModal'
 import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
+import AdminLogin from './pages/AdminLogin'
+import AdminDashboard from './pages/AdminDashboard'
+import AdminGuard from './components/admin/AdminGuard'
 
-export default function App() {
+function PublicPortfolio() {
   const [loadingComplete, setLoadingComplete] = useState(false)
   const [isMinimalMode, setIsMinimalMode] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -123,7 +128,7 @@ export default function App() {
               )}
             </AnimatePresence>
 
-            {/* Recruiter Switcher Banner between Services and Contact when Minimal Mode is active */}
+            {/* Switcher Banner between Services and Contact when Minimal Mode is active */}
             <AnimatePresence>
               {isMinimalMode && (
                 <motion.div
@@ -169,5 +174,27 @@ export default function App() {
         </div>
       </SmoothScroll>
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <PortfolioProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<PublicPortfolio />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <AdminGuard>
+                <AdminDashboard />
+              </AdminGuard>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </PortfolioProvider>
   )
 }

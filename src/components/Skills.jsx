@@ -1,5 +1,14 @@
 import { motion } from 'framer-motion'
 import { Code2, Smartphone, Database, Cpu } from 'lucide-react'
+import { usePortfolio } from '../context/PortfolioContext'
+import { initialSkillPillars } from '../data/initialPortfolioData'
+
+const iconMap = {
+  Smartphone,
+  Code2,
+  Cpu,
+  Database,
+}
 
 // Continuous marquee track row 1
 const marqueeRow1 = [
@@ -25,34 +34,9 @@ const marqueeRow2 = [
   { name: 'Vercel', icon: '/icons/vercel-original.svg', tag: 'Deployment' },
 ]
 
-const skillPillars = [
-  {
-    category: 'Mobile Product Engineering',
-    icon: Smartphone,
-    summary: 'Cross-platform mobile apps for iOS and Android with offline caching, local state architecture, and smooth native bridges.',
-    stack: ['Flutter', 'Dart', 'Supabase Mobile', 'FCM Push Notifications', 'Provider / Riverpod'],
-  },
-  {
-    category: 'Full-Stack Web Systems',
-    icon: Code2,
-    summary: 'Responsive, accessible frontend architectures backed by high-throughput RESTful APIs, JWT sessions, and relational models.',
-    stack: ['React 19', 'TypeScript', 'Node.js', 'Express.js', 'PostgreSQL', 'Tailwind CSS'],
-  },
-  {
-    category: 'AI Integration & Backend APIs',
-    icon: Cpu,
-    summary: 'Custom RAG search pipelines, Groq high-speed LLM integration, prompt engineering, and scalable webhook integrations.',
-    stack: ['Groq API', 'RAG Pipelines', 'Vector Indexing', 'Python / Flask', 'Socket.IO WebSockets'],
-  },
-  {
-    category: 'Database & Infrastructure',
-    icon: Database,
-    summary: 'Strict ACID compliance, Row-Level Security (RLS) policies, schema migrations, and optimized indexing strategies.',
-    stack: ['PostgreSQL', 'Supabase RLS', 'MongoDB', 'Redis Caching', 'Postman Automated Tests'],
-  },
-]
-
 export default function Skills() {
+  const { skills: contextSkills } = usePortfolio()
+  const skillPillars = contextSkills && contextSkills.length > 0 ? contextSkills : initialSkillPillars
   return (
     <section id="skills" className="py-24 border-t border-border/60">
       <div className="max-w-6xl mx-auto px-6">
@@ -121,7 +105,7 @@ export default function Skills() {
         {/* ── 2. Structured Architectural Capability Cards ── */}
         <div className="grid md:grid-cols-2 gap-6">
           {skillPillars.map((pillar, i) => {
-            const Icon = pillar.icon
+            const Icon = typeof pillar.icon === 'string' ? (iconMap[pillar.icon] || Code2) : (pillar.icon || Code2)
             return (
               <motion.div
                 key={pillar.category}
