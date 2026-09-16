@@ -62,7 +62,7 @@ export default function AdminGuard({ children }) {
           </div>
           <h2 className="font-display text-xl font-bold text-foreground mb-2">Unauthorized Access</h2>
           <p className="text-xs text-muted-foreground font-mono leading-relaxed mb-6">
-            The account <span className="text-foreground font-semibold">{session.user?.email}</span> is not on the authorized administrator whitelist.
+            Only the verified portfolio owner is authorized to access or initialize Portfolio Studio.
           </p>
           <a
             href="/"

@@ -31,7 +31,7 @@ export default function AdminLogin() {
     const cleanEmail = email.trim().toLowerCase()
     if (!AUTHORIZED_ADMIN_EMAILS.includes(cleanEmail)) {
       setIsLoading(false)
-      setErrorMessage('Access Denied: Only the verified portfolio owner (mehrabjayeed715@gmail.com) is authorized to access or initialize Portfolio Studio.')
+      setErrorMessage('Access Denied: Only the verified portfolio owner is authorized to access or initialize Portfolio Studio.')
       return
     }
 
