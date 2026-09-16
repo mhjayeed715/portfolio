@@ -4,6 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Lock, Mail, ArrowLeft, Shield, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
+const AUTHORIZED_ADMIN_EMAILS = [
+  'mehrabjayeed715@gmail.com',
+  import.meta.env.VITE_ADMIN_EMAIL,
+].filter(Boolean)
+
 export default function AdminLogin() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -22,6 +27,13 @@ export default function AdminLogin() {
     setErrorMessage('')
     setSuccessMessage('')
     setIsLoading(true)
+
+    const cleanEmail = email.trim().toLowerCase()
+    if (!AUTHORIZED_ADMIN_EMAILS.includes(cleanEmail)) {
+      setIsLoading(false)
+      setErrorMessage('Access Denied: Only the verified portfolio owner (mehrabjayeed715@gmail.com) is authorized to access or initialize Portfolio Studio.')
+      return
+    }
 
     try {
       if (isSignUp) {

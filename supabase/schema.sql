@@ -89,21 +89,31 @@ CREATE POLICY "Public read portfolio_education" ON public.portfolio_education FO
 DROP POLICY IF EXISTS "Public read portfolio_settings" ON public.portfolio_settings;
 CREATE POLICY "Public read portfolio_settings" ON public.portfolio_settings FOR SELECT USING (true);
 
--- 4. Authenticated Admin Write Policies (Allow only logged in admin to mutate)
+-- 4. Authenticated Admin Write Policies (Strictly restricted to verified owner email)
 DROP POLICY IF EXISTS "Admin write portfolio_projects" ON public.portfolio_projects;
-CREATE POLICY "Admin write portfolio_projects" ON public.portfolio_projects FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin write portfolio_projects" ON public.portfolio_projects FOR ALL TO authenticated 
+USING (lower(auth.jwt() ->> 'email') = 'mehrabjayeed715@gmail.com') 
+WITH CHECK (lower(auth.jwt() ->> 'email') = 'mehrabjayeed715@gmail.com');
 
 DROP POLICY IF EXISTS "Admin write portfolio_skills" ON public.portfolio_skills;
-CREATE POLICY "Admin write portfolio_skills" ON public.portfolio_skills FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin write portfolio_skills" ON public.portfolio_skills FOR ALL TO authenticated 
+USING (lower(auth.jwt() ->> 'email') = 'mehrabjayeed715@gmail.com') 
+WITH CHECK (lower(auth.jwt() ->> 'email') = 'mehrabjayeed715@gmail.com');
 
 DROP POLICY IF EXISTS "Admin write portfolio_services" ON public.portfolio_services;
-CREATE POLICY "Admin write portfolio_services" ON public.portfolio_services FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin write portfolio_services" ON public.portfolio_services FOR ALL TO authenticated 
+USING (lower(auth.jwt() ->> 'email') = 'mehrabjayeed715@gmail.com') 
+WITH CHECK (lower(auth.jwt() ->> 'email') = 'mehrabjayeed715@gmail.com');
 
 DROP POLICY IF EXISTS "Admin write portfolio_education" ON public.portfolio_education;
-CREATE POLICY "Admin write portfolio_education" ON public.portfolio_education FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin write portfolio_education" ON public.portfolio_education FOR ALL TO authenticated 
+USING (lower(auth.jwt() ->> 'email') = 'mehrabjayeed715@gmail.com') 
+WITH CHECK (lower(auth.jwt() ->> 'email') = 'mehrabjayeed715@gmail.com');
 
 DROP POLICY IF EXISTS "Admin write portfolio_settings" ON public.portfolio_settings;
-CREATE POLICY "Admin write portfolio_settings" ON public.portfolio_settings FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin write portfolio_settings" ON public.portfolio_settings FOR ALL TO authenticated 
+USING (lower(auth.jwt() ->> 'email') = 'mehrabjayeed715@gmail.com') 
+WITH CHECK (lower(auth.jwt() ->> 'email') = 'mehrabjayeed715@gmail.com');
 
 -- 5. Seed Initial Projects (All 9 Projects)
 INSERT INTO public.portfolio_projects (title, category, subtitle, award, description, highlights, image, tech, github, live, flagship, order_index)
