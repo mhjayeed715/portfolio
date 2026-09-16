@@ -136,10 +136,10 @@ export default function Hero({ isMinimalMode, onToggleMinimalMode }) {
                       ? 'bg-foreground text-background border-foreground font-semibold shadow-xs'
                       : 'bg-card/80 hover:bg-secondary text-muted-foreground hover:text-foreground border-border/80'
                   }`}
-                  title="Recruiter Mode: Show only core essential sections (About · Work · Services · Contact)"
+                  title="Minimal Mode: Showing essential sections (About · Work · Services · Contact)"
                 >
                   <Briefcase size={12} className={isMinimalMode ? 'text-background' : 'text-primary'} />
-                  <span>{isMinimalMode ? 'Recruiter View: Active' : 'Recruiter View · 2-Min Read'}</span>
+                  <span>{isMinimalMode ? 'Minimal Mode · Active' : 'Expand All 9 Sections'}</span>
                   <span className={`w-1.5 h-1.5 rounded-full ${isMinimalMode ? 'bg-emerald-400 animate-pulse' : 'bg-muted-foreground/40'}`} />
                 </motion.button>
               )}

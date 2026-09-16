@@ -22,9 +22,14 @@ export default function App() {
   const [loadingComplete, setLoadingComplete] = useState(false)
   const [isMinimalMode, setIsMinimalMode] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('portfolio_view_mode') === 'minimal'
+      const saved = localStorage.getItem('portfolio_view_mode')
+      if (saved) {
+        return saved === 'minimal'
+      }
+      // By default, Minimal mode is active
+      return true
     }
-    return false
+    return true
   })
 
   const toggleMinimalMode = () => {
@@ -136,7 +141,7 @@ export default function App() {
                       </div>
                       <div>
                         <p className="text-xs sm:text-sm font-semibold text-foreground">
-                          Recruiter Mode Active (Showing About · Work · Services · Contact)
+                          Minimal Mode Active (Showing About · Work · Services · Contact)
                         </p>
                         <p className="text-[11px] sm:text-xs text-muted-foreground font-mono mt-0.5">
                           Looking for Skills breakdown, 2nd Place Awards, Philosophy & Education?

@@ -118,8 +118,8 @@ export default function Navbar({ isMinimalMode, onToggleMinimalMode }) {
                   ? 'bg-foreground text-background border-foreground shadow-emerald-500/20'
                   : 'liquid-glass text-foreground border-border/80 hover:bg-secondary'
               }`}
-              aria-label={isMinimalMode ? 'Switch to Full Portfolio' : 'Switch to Recruiter / Minimal View'}
-              title={isMinimalMode ? 'Recruiter Mode Active (Showing About, Work, Services, Contact) — Click for Full Story' : 'Recruiter Mode: Short on time? View essential sections only (About, Work, Services, Contact)'}
+              aria-label={isMinimalMode ? 'Switch to Full Portfolio' : 'Switch to Minimal View'}
+              title={isMinimalMode ? 'Minimal Mode Active (Showing About, Work, Services, Contact) — Click to expand all sections' : 'Minimal Mode: View essential sections only (About, Work, Services, Contact)'}
             >
               {isMinimalMode ? <Sparkles size={16} /> : <Briefcase size={16} />}
               {isMinimalMode && (
@@ -210,10 +210,10 @@ export default function Navbar({ isMinimalMode, onToggleMinimalMode }) {
                           ? 'bg-foreground text-background border-foreground font-semibold shadow-xs'
                           : 'bg-secondary/70 hover:bg-secondary text-muted-foreground hover:text-foreground border-border/60'
                       }`}
-                      title={isMinimalMode ? 'Recruiter Mode Active — Click to show all 9 sections' : 'Recruiter View: Show only About, Work, Services, Contact'}
+                      title={isMinimalMode ? 'Minimal Mode Active — Click to expand all 9 sections' : 'Click to return to Minimal view'}
                     >
                       <Briefcase size={12} className={isMinimalMode ? 'text-background' : 'opacity-70'} />
-                      <span>{isMinimalMode ? 'Minimal' : 'Recruiter'}</span>
+                      <span>{isMinimalMode ? 'Minimal' : 'Expanded'}</span>
                       <span className={`w-1.5 h-1.5 rounded-full ${isMinimalMode ? 'bg-emerald-400 animate-pulse' : 'bg-muted-foreground/30'}`} />
                     </button>
                   </div>
@@ -317,14 +317,14 @@ export default function Navbar({ isMinimalMode, onToggleMinimalMode }) {
                     >
                       <div className="flex items-center gap-2">
                         <Briefcase size={14} className={isMinimalMode ? 'text-background' : 'text-primary'} />
-                        <span>Recruiter View (Minimal)</span>
+                        <span>Minimal View</span>
                       </div>
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${isMinimalMode ? 'bg-emerald-400 text-black' : 'bg-muted text-muted-foreground'}`}>
-                        {isMinimalMode ? 'ACTIVE' : 'OFF'}
+                        {isMinimalMode ? 'ACTIVE' : 'EXPANDED'}
                       </span>
                     </button>
                     <p className="text-[10px] font-mono text-muted-foreground px-1 mt-1.5 text-center">
-                      {isMinimalMode ? 'Showing About · Work · Services · Contact' : 'Tap to show 4 essential sections only'}
+                      {isMinimalMode ? 'Showing 4 essential sections (About · Work · Services · Contact)' : 'Tap to switch back to Minimal View'}
                     </p>
                   </div>
                 )}
