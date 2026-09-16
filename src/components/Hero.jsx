@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
-import { ArrowDown, ArrowUpRight, FileDown, Terminal, Briefcase } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, FileDown, Terminal } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 
 const GitHubIcon = ({ className }) => (
@@ -107,7 +107,7 @@ export default function Hero({ isMinimalMode, onToggleMinimalMode }) {
           
           {/* Left Column — Text & CTAs */}
           <div>
-            {/* Availability Status Badge & Recruiter View Shortcut */}
+            {/* Availability Status Badge */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mb-3 sm:mb-5">
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
@@ -123,26 +123,6 @@ export default function Hero({ isMinimalMode, onToggleMinimalMode }) {
                   {settings?.heroAvailability || 'Available for opportunities'}
                 </span>
               </motion.div>
-
-              {onToggleMinimalMode && (
-                <motion.button
-                  type="button"
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.08 }}
-                  onClick={onToggleMinimalMode}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1 sm:px-3 sm:py-1.5 rounded-full border text-[11px] sm:text-xs font-mono transition-all duration-200 cursor-pointer shadow-2xs ${
-                    isMinimalMode
-                      ? 'bg-foreground text-background border-foreground font-semibold shadow-xs'
-                      : 'bg-card/80 hover:bg-secondary text-muted-foreground hover:text-foreground border-border/80'
-                  }`}
-                  title="Minimal Mode: Showing essential sections (About · Work · Services · Contact)"
-                >
-                  <Briefcase size={12} className={isMinimalMode ? 'text-background' : 'text-primary'} />
-                  <span>{isMinimalMode ? 'Minimal Mode · Active' : 'Expand All 9 Sections'}</span>
-                  <span className={`w-1.5 h-1.5 rounded-full ${isMinimalMode ? 'bg-emerald-400 animate-pulse' : 'bg-muted-foreground/40'}`} />
-                </motion.button>
-              )}
             </div>
 
             {/* Headline */}

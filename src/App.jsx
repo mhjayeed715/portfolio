@@ -27,11 +27,13 @@ function PublicPortfolio() {
   const [loadingComplete, setLoadingComplete] = useState(false)
   const [isMinimalMode, setIsMinimalMode] = useState(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('portfolio_view_mode')
-      if (saved) {
-        return saved === 'minimal'
+      // Clear any legacy localStorage that cached 'full' during testing
+      localStorage.removeItem('portfolio_view_mode')
+      const sessionSaved = sessionStorage.getItem('portfolio_view_mode')
+      if (sessionSaved) {
+        return sessionSaved === 'minimal'
       }
-      // By default, Minimal mode is active
+      // Unconditionally default to Minimal Mode for all visitors
       return true
     }
     return true
@@ -41,7 +43,7 @@ function PublicPortfolio() {
     setIsMinimalMode((prev) => {
       const next = !prev
       if (typeof window !== 'undefined') {
-        localStorage.setItem('portfolio_view_mode', next ? 'minimal' : 'full')
+        sessionStorage.setItem('portfolio_view_mode', next ? 'minimal' : 'full')
       }
       return next
     })
