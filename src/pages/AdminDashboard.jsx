@@ -106,8 +106,12 @@ export default function AdminDashboard() {
         return
       }
 
-      // Upload to Supabase Storage
-      const fileName = `resume_${Date.now()}.pdf`
+      // Upload to Supabase Storage with clean professional filename
+      const sanitizedName = file.name
+        ? file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+        : 'SM_Mehrab_Hossain_Jayeed_Resume.pdf'
+      const fileName = sanitizedName.toLowerCase().endsWith('.pdf') ? sanitizedName : `${sanitizedName}.pdf`
+
       const { data, error } = await supabase.storage
         .from('portfolio-assets')
         .upload(fileName, file, {
