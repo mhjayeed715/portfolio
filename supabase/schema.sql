@@ -66,14 +66,24 @@ CREATE TABLE IF NOT EXISTS public.portfolio_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. Enable Row Level Security (RLS)
+-- 2. Grant Permissions to anon & authenticated roles (RLS handles row-level security)
+GRANT USAGE ON SCHEMA public TO anon, authenticated;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
+GRANT ALL ON ALL ROUTINES IN SCHEMA public TO anon, authenticated;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO anon, authenticated;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO anon, authenticated;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON ROUTINES TO anon, authenticated;
+
+-- 3. Enable Row Level Security (RLS)
 ALTER TABLE public.portfolio_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.portfolio_skills ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.portfolio_services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.portfolio_education ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.portfolio_settings ENABLE ROW LEVEL SECURITY;
 
--- 3. Public Read Policies (Allow anyone visiting portfolio to read data)
+-- 4. Public Read Policies (Allow anyone visiting portfolio to read data)
 DROP POLICY IF EXISTS "Public read portfolio_projects" ON public.portfolio_projects;
 CREATE POLICY "Public read portfolio_projects" ON public.portfolio_projects FOR SELECT USING (true);
 
@@ -258,3 +268,35 @@ VALUES (
   '#'
 )
 ON CONFLICT (id) DO UPDATE SET updated_at = NOW();
+
+-- 7. Supabase Storage Bucket Setup (for CV, Resume, and Project Assets)
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'portfolio-assets',
+  'portfolio-assets',
+  true,
+  5242880, -- 5MB limit
+  ARRAY['application/pdf', 'image/png', 'image/jpeg', 'image/webp', 'image/svg+xml']
+)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+-- Storage Policies
+DROP POLICY IF EXISTS "Public read portfolio-assets" ON storage.objects;
+CREATE POLICY "Public read portfolio-assets" ON storage.objects 
+FOR SELECT USING (bucket_id = 'portfolio-assets');
+
+DROP POLICY IF EXISTS "Admin upload portfolio-assets" ON storage.objects;
+CREATE POLICY "Admin upload portfolio-assets" ON storage.objects 
+FOR INSERT TO authenticated 
+WITH CHECK (bucket_id = 'portfolio-assets');
+
+DROP POLICY IF EXISTS "Admin update portfolio-assets" ON storage.objects;
+CREATE POLICY "Admin update portfolio-assets" ON storage.objects 
+FOR UPDATE TO authenticated 
+USING (bucket_id = 'portfolio-assets');
+
+DROP POLICY IF EXISTS "Admin delete portfolio-assets" ON storage.objects;
+CREATE POLICY "Admin delete portfolio-assets" ON storage.objects 
+FOR DELETE TO authenticated 
+USING (bucket_id = 'portfolio-assets');
+
