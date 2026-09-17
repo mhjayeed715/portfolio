@@ -137,8 +137,8 @@ export default function AdminDashboard() {
         .getPublicUrl(fileName)
 
       if (urlData?.publicUrl) {
-        setSettingsForm((prev) => ({ ...prev, resumeUrl: urlData.publicUrl }))
-        showToast('Resume uploaded successfully!')
+        setSettingsForm((prev) => ({ ...prev, resumeUrl: '/resume' }))
+        showToast('Resume uploaded! Active at https://www.jayeed.pro.bd/resume')
       }
     } catch (err) {
       showToast(`Upload error: ${err.message}`, 'error')

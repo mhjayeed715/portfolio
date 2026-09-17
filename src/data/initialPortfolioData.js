@@ -285,5 +285,5 @@ export const initialSiteSettings = {
     'I turn early-stage ideas into dependable iOS, Android, and web products that are clear to use, robust to build, and ready to launch.',
   aboutBio:
     'Full-Stack & Mobile Developer specializing in high-velocity MVP execution. I bridge clean interface design with hardened backend architectures, helping founders and engineering teams build products that look refined and scale cleanly.',
-  resumeUrl: '/SM_Mehrab_Hossain_Jayeed_Resume.pdf',
+  resumeUrl: '/resume',
 }
