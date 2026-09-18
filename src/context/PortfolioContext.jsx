@@ -135,7 +135,12 @@ export function PortfolioProvider({ children }) {
           heroAvailability: settData.hero_availability || initialSiteSettings.heroAvailability,
           heroSubtext: settData.hero_subtext || initialSiteSettings.heroSubtext,
           aboutBio: settData.about_bio || initialSiteSettings.aboutBio,
-          resumeUrl: settData.resume_url || initialSiteSettings.resumeUrl,
+          resumeUrl:
+            settData.resume_url &&
+            settData.resume_url !== '/resume' &&
+            settData.resume_url !== '#'
+              ? settData.resume_url
+              : initialSiteSettings.resumeUrl,
         }
         setSettings(formatted)
         localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(formatted))

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Briefcase, Sparkles } from 'lucide-react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { PortfolioProvider } from './context/PortfolioContext'
+import { PortfolioProvider, usePortfolio } from './context/PortfolioContext'
 import SmoothScroll from './components/SmoothScroll'
 import LoadingScreen from './components/LoadingScreen'
 import Navbar from './components/Navbar'
@@ -22,6 +22,27 @@ import ScrollToTop from './components/ScrollToTop'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminGuard from './components/admin/AdminGuard'
+
+function ResumeRedirect() {
+  const { settings, isLoading } = usePortfolio()
+
+  useEffect(() => {
+    if (!isLoading) {
+      const targetUrl =
+        settings?.resumeUrl && settings.resumeUrl !== '/resume' && settings.resumeUrl !== '#'
+          ? settings.resumeUrl
+          : '/SM_Mehrab_Hossain_Jayeed_Resume.pdf'
+      window.location.replace(targetUrl)
+    }
+  }, [settings?.resumeUrl, isLoading])
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3 font-mono text-xs text-muted-foreground">
+      <div className="w-5 h-5 border-2 border-foreground/30 border-t-foreground rounded-full animate-spin" />
+      <p>Loading resume...</p>
+    </div>
+  )
+}
 
 function PublicPortfolio() {
   const [loadingComplete, setLoadingComplete] = useState(false)
@@ -185,6 +206,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<PublicPortfolio />} />
+          <Route path="/resume" element={<ResumeRedirect />} />
+          <Route path="/resume.pdf" element={<ResumeRedirect />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route
             path="/admin"

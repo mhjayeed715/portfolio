@@ -179,11 +179,9 @@ export default function Hero({ isMinimalMode, onToggleMinimalMode }) {
 
               <a
                 href={
-                  settings?.resumeUrl
-                    ? settings.resumeUrl.includes('portfolio-assets') || settings.resumeUrl.includes('supabase.co')
-                      ? '/resume'
-                      : settings.resumeUrl
-                    : '/resume'
+                  settings?.resumeUrl && settings.resumeUrl !== '/resume' && settings.resumeUrl !== '#'
+                    ? settings.resumeUrl
+                    : '/SM_Mehrab_Hossain_Jayeed_Resume.pdf'
                 }
                 target="_blank"
                 rel="noopener noreferrer"

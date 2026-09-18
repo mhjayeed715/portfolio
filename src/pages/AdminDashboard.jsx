@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FolderKanban,
@@ -74,6 +74,23 @@ export default function AdminDashboard() {
   const [educationForm, setEducationForm] = useState(education)
   const [settingsForm, setSettingsForm] = useState(settings)
 
+  // Keep form states synchronized when data arrives from Supabase
+  useEffect(() => {
+    if (skills) setSkillsForm(skills)
+  }, [skills])
+
+  useEffect(() => {
+    if (services) setServicesForm(services)
+  }, [services])
+
+  useEffect(() => {
+    if (education) setEducationForm(education)
+  }, [education])
+
+  useEffect(() => {
+    if (settings) setSettingsForm(settings)
+  }, [settings])
+
   const showToast = (msg, type = 'success') => {
     setToast({ msg, type })
     setTimeout(() => setToast(null), 3200)
@@ -106,11 +123,11 @@ export default function AdminDashboard() {
         return
       }
 
-      // Upload to Supabase Storage with clean professional filename
-      const sanitizedName = file.name
-        ? file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
-        : 'SM_Mehrab_Hossain_Jayeed_Resume.pdf'
-      const fileName = sanitizedName.toLowerCase().endsWith('.pdf') ? sanitizedName : `${sanitizedName}.pdf`
+      // Upload to Supabase Storage with unique timestamped filename to prevent stale caching
+      const cleanBase = file.name
+        ? file.name.replace(/\.pdf$/i, '').replace(/[^a-zA-Z0-9._-]/g, '_')
+        : 'Resume'
+      const fileName = `${cleanBase}_${Date.now()}.pdf`
 
       const { data, error } = await supabase.storage
         .from('portfolio-assets')
@@ -137,13 +154,25 @@ export default function AdminDashboard() {
         .getPublicUrl(fileName)
 
       if (urlData?.publicUrl) {
-        setSettingsForm((prev) => ({ ...prev, resumeUrl: '/resume' }))
-        showToast('Resume uploaded! Active at https://www.jayeed.pro.bd/resume')
+        const publicUrl = urlData.publicUrl
+        const updatedSettings = { ...settingsForm, resumeUrl: publicUrl }
+        setSettingsForm(updatedSettings)
+
+        // Automatically persist to Supabase & localStorage
+        const res = await saveSettings(updatedSettings)
+        if (res.success) {
+          showToast('Resume uploaded and published successfully!')
+        } else {
+          showToast(`Resume uploaded, but failed to save settings: ${res.error}`, 'error')
+        }
       }
     } catch (err) {
       showToast(`Upload error: ${err.message}`, 'error')
     } finally {
       setResumeUploading(false)
+      if (e.target) {
+        e.target.value = ''
+      }
     }
   }
 

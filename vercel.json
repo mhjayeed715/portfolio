@@ -1,14 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/resume",
-      "destination": "https://ozoogkghptkomyzxlbvs.supabase.co/storage/v1/object/public/portfolio-assets/SM_Mehrab_Hossain_Jayeed_Resume.pdf"
-    },
-    {
-      "source": "/resume.pdf",
-      "destination": "https://ozoogkghptkomyzxlbvs.supabase.co/storage/v1/object/public/portfolio-assets/SM_Mehrab_Hossain_Jayeed_Resume.pdf"
-    },
-    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
