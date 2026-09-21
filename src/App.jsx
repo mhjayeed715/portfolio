@@ -22,34 +22,7 @@ import ScrollToTop from './components/ScrollToTop'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminGuard from './components/admin/AdminGuard'
-
-function ResumeRedirect() {
-  const { settings, isLoading } = usePortfolio()
-
-  const targetUrl =
-    settings?.resumeUrl && settings.resumeUrl !== '/resume' && settings.resumeUrl !== '#'
-      ? settings.resumeUrl
-      : '/SM_Mehrab_Hossain_Jayeed_Resume.pdf'
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3 font-mono text-xs text-muted-foreground">
-        <div className="w-5 h-5 border-2 border-foreground/30 border-t-foreground rounded-full animate-spin" />
-        <p>Loading resume...</p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="w-full h-screen bg-neutral-950 flex flex-col overflow-hidden">
-      <iframe
-        src={targetUrl}
-        title="Resume - S M Mehrab Hossain Jayeed"
-        className="w-full h-full border-none flex-1"
-      />
-    </div>
-  )
-}
+import ResumeViewer from './pages/ResumeViewer'
 
 function PublicPortfolio() {
   const [loadingComplete, setLoadingComplete] = useState(false)
@@ -213,8 +186,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<PublicPortfolio />} />
-          <Route path="/resume" element={<ResumeRedirect />} />
-          <Route path="/resume.pdf" element={<ResumeRedirect />} />
+          <Route path="/resume" element={<ResumeViewer />} />
+          <Route path="/resume.pdf" element={<ResumeViewer />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route
             path="/admin"
