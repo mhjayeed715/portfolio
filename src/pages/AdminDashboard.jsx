@@ -28,6 +28,7 @@ import {
   Globe,
   Smartphone,
   Cpu,
+  Image as ImageIcon,
 } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
 import { supabase } from '../lib/supabase'
@@ -67,6 +68,11 @@ export default function AdminDashboard() {
   // Resume upload state
   const [resumeUploading, setResumeUploading] = useState(false)
   const [resumeFileName, setResumeFileName] = useState('')
+
+  // Project thumbnail upload state
+  const [thumbnailUploading, setThumbnailUploading] = useState(false)
+  const [isThumbDragging, setIsThumbDragging] = useState(false)
+  const [showManualImagePath, setShowManualImagePath] = useState(false)
 
   // Local form state for Skills, Services, Education, Settings
   const [skillsForm, setSkillsForm] = useState(skills)
@@ -174,6 +180,93 @@ export default function AdminDashboard() {
         e.target.value = ''
       }
     }
+  }
+
+  // Project Thumbnail Upload & Drag-and-Drop Handler
+  const handleProjectThumbnailUpload = async (file) => {
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select an image file (PNG, JPG, WebP, SVG).', 'error')
+      return
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('Image file must be under 5MB.', 'error')
+      return
+    }
+
+    setThumbnailUploading(true)
+
+    try {
+      if (!supabase) {
+        showToast('Supabase client not initialized.', 'error')
+        setThumbnailUploading(false)
+        return
+      }
+
+      // Generate a clean filename for Supabase storage
+      const ext = file.name.split('.').pop()?.toLowerCase() || 'png'
+      const baseName = (editingProject?.title || 'project')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '_')
+        .replace(/_+/g, '_')
+        .slice(0, 32)
+      const fileName = `projects/${baseName}_${Date.now()}.${ext}`
+
+      // Upload to Supabase Storage 'portfolio-assets' bucket
+      const { data, error } = await supabase.storage
+        .from('portfolio-assets')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: true,
+          contentType: file.type,
+        })
+
+      if (error) {
+        showToast(`Image upload failed: ${error.message}`, 'error')
+        setThumbnailUploading(false)
+        return
+      }
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('portfolio-assets')
+        .getPublicUrl(fileName)
+
+      if (urlData?.publicUrl) {
+        setEditingProject((prev) => ({ ...prev, image: urlData.publicUrl }))
+        showToast('Project thumbnail uploaded & updated!')
+      }
+    } catch (err) {
+      showToast(`Upload error: ${err.message}`, 'error')
+    } finally {
+      setThumbnailUploading(false)
+    }
+  }
+
+  const handleThumbnailDrop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsThumbDragging(false)
+    const files = e.dataTransfer?.files
+    if (files && files.length > 0) {
+      handleProjectThumbnailUpload(files[0])
+    }
+  }
+
+  const handleThumbnailDragOver = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!isThumbDragging) setIsThumbDragging(true)
+  }
+
+  const handleThumbnailDragLeave = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsThumbDragging(false)
   }
 
   const handleSignOut = async () => {
@@ -973,16 +1066,126 @@ export default function AdminDashboard() {
                   />
                 </div>
 
-                <div>
-                  <label className="text-xs font-mono text-muted-foreground block mb-1 font-medium">Cover Image Path / URL *</label>
+                {/* Project Cover Thumbnail (Drag & Drop + Instant Upload) */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-mono text-muted-foreground font-medium flex items-center gap-1.5">
+                      <ImageIcon size={13} className="text-foreground" />
+                      <span>Project Thumbnail *</span>
+                    </label>
+                    <span className="text-[10px] font-mono text-muted-foreground">
+                      Drag & drop or click · PNG, JPG, WebP (max 5MB)
+                    </span>
+                  </div>
+
+                  {/* Hidden file input */}
                   <input
-                    type="text"
-                    required
-                    value={editingProject.image || ''}
-                    onChange={(e) => setEditingProject({ ...editingProject, image: e.target.value })}
-                    placeholder="/projects/DoubleGapIndex.png"
-                    className="w-full p-3 rounded-xl bg-secondary/60 border border-border/80 text-xs text-foreground outline-none font-mono"
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) {
+                        handleProjectThumbnailUpload(e.target.files[0])
+                        e.target.value = ''
+                      }
+                    }}
+                    id="project-thumb-upload-input"
+                    className="hidden"
                   />
+
+                  {/* Drag & Drop Container */}
+                  <div
+                    onDragOver={handleThumbnailDragOver}
+                    onDragEnter={handleThumbnailDragOver}
+                    onDragLeave={handleThumbnailDragLeave}
+                    onDrop={handleThumbnailDrop}
+                    className={`relative rounded-2xl border-2 transition-all duration-200 overflow-hidden ${
+                      isThumbDragging
+                        ? 'border-primary bg-primary/10 shadow-lg scale-[1.01]'
+                        : 'border-border/80 bg-secondary/30 hover:border-foreground/40'
+                    }`}
+                  >
+                    {editingProject.image ? (
+                      <div className="relative group aspect-video w-full bg-secondary/80 flex items-center justify-center overflow-hidden">
+                        <img
+                          src={editingProject.image}
+                          alt="Project Preview"
+                          className="w-full h-full object-cover"
+                        />
+                        {/* Hover / Drag Overlay */}
+                        <label
+                          htmlFor="project-thumb-upload-input"
+                          className="absolute inset-0 bg-black/65 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 cursor-pointer text-white"
+                        >
+                          <Upload size={22} className="animate-bounce" />
+                          <span className="text-xs font-semibold">Drop new image or click to change</span>
+                          <span className="text-[10px] font-mono opacity-80">Instant upload & update</span>
+                        </label>
+
+                        {thumbnailUploading && (
+                          <div className="absolute inset-0 bg-black/80 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-10 text-white">
+                            <div className="w-6 h-6 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                            <span className="text-xs font-mono">Uploading thumbnail...</span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <label
+                        htmlFor="project-thumb-upload-input"
+                        className="aspect-video w-full flex flex-col items-center justify-center p-6 text-center cursor-pointer border-2 border-dashed border-border/80 hover:border-foreground/50 transition-colors"
+                      >
+                        {thumbnailUploading ? (
+                          <div className="flex flex-col items-center gap-2">
+                            <div className="w-6 h-6 border-2 border-foreground/40 border-t-foreground rounded-full animate-spin" />
+                            <span className="text-xs font-mono text-muted-foreground">Uploading thumbnail...</span>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                            <div className="w-10 h-10 rounded-2xl bg-secondary flex items-center justify-center text-foreground">
+                              <Upload size={20} />
+                            </div>
+                            <p className="text-xs font-semibold text-foreground">
+                              Drag & drop project cover here, or <span className="text-primary underline">browse</span>
+                            </p>
+                            <p className="text-[10px] font-mono text-muted-foreground">
+                              16:9 ratio recommended · Updates instantly
+                            </p>
+                          </div>
+                        )}
+                      </label>
+                    )}
+                  </div>
+
+                  {/* Thumbnail controls and optional manual toggle */}
+                  <div className="flex items-center justify-between gap-2 pt-0.5">
+                    <label
+                      htmlFor="project-thumb-upload-input"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground text-xs font-mono cursor-pointer transition-colors"
+                    >
+                      <Upload size={12} />
+                      <span>{editingProject.image ? 'Change Image' : 'Browse File'}</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowManualImagePath(!showManualImagePath)}
+                      className="text-[11px] font-mono text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                    >
+                      {showManualImagePath ? 'Hide manual path' : 'Manual URL path'}
+                    </button>
+                  </div>
+
+                  {/* Collapsible Manual URL input if needed */}
+                  {showManualImagePath && (
+                    <div className="pt-1.5">
+                      <input
+                        type="text"
+                        value={editingProject.image || ''}
+                        onChange={(e) => setEditingProject({ ...editingProject, image: e.target.value })}
+                        placeholder="/projects/DoubleGapIndex.png"
+                        className="w-full p-2.5 rounded-xl bg-secondary/50 border border-border/80 text-xs text-foreground outline-none font-mono"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
