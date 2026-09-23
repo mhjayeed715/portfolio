@@ -17,6 +17,49 @@ const categoryDefs = [
   { id: 'ai', label: 'AI & Systems', icon: Cpu },
 ]
 
+function ProjectDescription({ text }) {
+  const [isExpanded, setIsExpanded] = useState(false)
+  if (!text) return null
+
+  // If text is within normal length (<= 200 chars), display full text with no cutoff.
+  // For longer descriptions (like DGI or detailed writeups), provide an interactive "Read more" toggle.
+  const isLong = text.length > 200
+
+  if (!isLong) {
+    return (
+      <p className="text-xs text-muted-foreground leading-relaxed">
+        {text}
+      </p>
+    )
+  }
+
+  return (
+    <div className="space-y-1">
+      <p
+        onClick={() => !isExpanded && setIsExpanded(true)}
+        className={`text-xs text-muted-foreground leading-relaxed transition-all duration-200 ${
+          isExpanded ? '' : 'line-clamp-3 cursor-pointer hover:text-foreground/90'
+        }`}
+        title={!isExpanded ? 'Click to read full description' : undefined}
+      >
+        {text}
+      </p>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          setIsExpanded((prev) => !prev)
+        }}
+        className="text-[11px] font-mono text-primary hover:underline font-medium inline-flex items-center gap-1 cursor-pointer transition-colors"
+      >
+        <span>{isExpanded ? 'Show less' : 'Read full description'}</span>
+        {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+      </button>
+    </div>
+  )
+}
+
 export default function Projects() {
   const { projects: contextProjects } = usePortfolio()
   const projects = contextProjects && contextProjects.length > 0 ? contextProjects : initialProjects
@@ -216,9 +259,7 @@ export default function Projects() {
                         {project.title}
                       </h4>
 
-                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
-                        {project.description}
-                      </p>
+                      <ProjectDescription text={project.description} />
 
                       <div className="flex flex-wrap gap-1 pt-1.5">
                         {project.highlights.slice(0, 3).map((h) => (

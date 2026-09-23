@@ -211,7 +211,7 @@ export default function Achievements() {
                       {cert.title}
                     </h4>
                     <p className="text-[11px] font-mono text-muted-foreground mb-2">{cert.issuer}</p>
-                    <p className="text-xs text-muted-foreground leading-relaxed mb-3 line-clamp-3">
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-3">
                       {cert.description}
                     </p>
 
