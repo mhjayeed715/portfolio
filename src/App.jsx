@@ -171,7 +171,7 @@ function PublicPortfolio() {
 
             <Contact />
           </main>
-          <Footer />
+          <Footer isMinimalMode={isMinimalMode} />
           <ScrollToTop />
           <ContactModal />
         </div>
