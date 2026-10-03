@@ -29,6 +29,10 @@ import {
   Smartphone,
   Cpu,
   Image as ImageIcon,
+  Lock,
+  Eye,
+  EyeOff,
+  KeyRound,
 } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
 import { supabase } from '../lib/supabase'
@@ -74,6 +78,12 @@ export default function AdminDashboard() {
   const [isThumbDragging, setIsThumbDragging] = useState(false)
   const [showManualImagePath, setShowManualImagePath] = useState(false)
 
+  // Admin Password Update state
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [passwordUpdating, setPasswordUpdating] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+
   // Local form state for Skills, Services, Education, Settings
   const [skillsForm, setSkillsForm] = useState(skills)
   const [servicesForm, setServicesForm] = useState(services)
@@ -100,6 +110,30 @@ export default function AdminDashboard() {
   const showToast = (msg, type = 'success') => {
     setToast({ msg, type })
     setTimeout(() => setToast(null), 3200)
+  }
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault()
+    if (!newPassword || newPassword.length < 6) {
+      showToast('Password must be at least 6 characters long', 'error')
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      showToast('Passwords do not match', 'error')
+      return
+    }
+    setPasswordUpdating(true)
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword })
+      if (error) throw error
+      showToast('Password updated successfully! You can now log in with this password.')
+      setNewPassword('')
+      setConfirmPassword('')
+    } catch (err) {
+      showToast(err.message || 'Failed to update password', 'error')
+    } finally {
+      setPasswordUpdating(false)
+    }
   }
 
   // Resume file upload handler
@@ -350,54 +384,56 @@ export default function AdminDashboard() {
       </AnimatePresence>
 
       {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl border-b border-border/80 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-foreground text-background flex items-center justify-center font-bold text-sm shadow-sm">
+      <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl border-b border-border/80 px-4 sm:px-6 py-3 sm:py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-foreground text-background flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm shrink-0">
               J
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="font-display text-base sm:text-lg font-bold tracking-tight text-foreground">
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <h1 className="font-display text-sm sm:text-lg font-bold tracking-tight text-foreground truncate">
                   Portfolio Studio
                 </h1>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-primary/10 text-primary border border-primary/20">
+                <span className="px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-bold bg-primary/10 text-primary border border-primary/20 shrink-0">
                   ADMIN
                 </span>
               </div>
-              <p className="text-[11px] font-mono text-muted-foreground flex items-center gap-1.5">
-                <span className={`w-1.5 h-1.5 rounded-full ${supabaseConnected ? 'bg-emerald-400' : 'bg-amber-400'}`} />
-                <span>{supabaseConnected ? 'Supabase Live Connected' : 'Local Storage Mode'}</span>
+              <p className="text-[10px] sm:text-[11px] font-mono text-muted-foreground flex items-center gap-1.5 truncate">
+                <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${supabaseConnected ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+                <span className="truncate">{supabaseConnected ? 'Supabase Live' : 'Local Storage'}</span>
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 shrink-0">
             <a
               href="/"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-border/80 hover:bg-secondary text-xs font-mono text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-border/80 hover:bg-secondary text-xs font-mono text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              title="View Live Portfolio"
             >
-              <span>View Portfolio</span>
               <ExternalLink size={12} />
+              <span className="hidden sm:inline">View Portfolio</span>
             </a>
             <button
               onClick={handleSignOut}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-secondary hover:bg-destructive/10 hover:text-destructive text-xs font-mono text-muted-foreground transition-colors cursor-pointer border border-border/60"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-secondary hover:bg-destructive/10 hover:text-destructive text-xs font-mono text-muted-foreground transition-colors cursor-pointer border border-border/60"
+              title="Sign Out"
             >
               <LogOut size={12} />
-              <span>Sign Out</span>
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
           </div>
         </div>
       </header>
 
       {/* Main Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 w-full">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 w-full">
         
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 border-b border-border/60 no-scrollbar">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-3 mb-6 sm:mb-8 border-b border-border/60 no-scrollbar touch-pan-x -mx-4 px-4 sm:mx-0 sm:px-0">
           {tabs.map((tab) => {
             const Icon = tab.icon
             const isActive = activeTab === tab.id
@@ -935,11 +971,76 @@ export default function AdminDashboard() {
                 await saveSettings(settingsForm)
                 showToast('Settings saved successfully!')
               }}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-foreground text-background text-xs font-semibold hover:opacity-90 cursor-pointer shadow-md"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-foreground text-background text-xs font-semibold hover:opacity-90 cursor-pointer shadow-md mb-8"
             >
               <Save size={14} />
               <span>Save Settings</span>
             </button>
+
+            {/* Account Security & Password Update Section */}
+            <div className="p-6 rounded-2xl liquid-glass border border-border/80 space-y-4">
+              <div className="flex items-center gap-2 mb-1">
+                <KeyRound size={16} className="text-foreground" />
+                <h3 className="text-sm font-display font-bold text-foreground tracking-tight">
+                  Change Admin Password
+                </h3>
+              </div>
+              <p className="text-[11px] font-mono text-muted-foreground -mt-2">
+                Set a permanent new password for your admin account. Takes effect immediately for your next login.
+              </p>
+
+              <form onSubmit={handleUpdatePassword} className="space-y-3 pt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-mono text-muted-foreground block mb-1 font-medium">
+                      New Password (min 6 chars)
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showNewPassword ? 'text' : 'password'}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="••••••••••••"
+                        required
+                        className="w-full pl-3 pr-10 py-2.5 rounded-xl bg-secondary/50 border border-border/70 text-xs text-foreground outline-none font-mono"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 transition-colors"
+                      >
+                        {showNewPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-mono text-muted-foreground block mb-1 font-medium">
+                      Confirm New Password
+                    </label>
+                    <input
+                      type={showNewPassword ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="••••••••••••"
+                      required
+                      className="w-full p-2.5 rounded-xl bg-secondary/50 border border-border/70 text-xs text-foreground outline-none font-mono"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={passwordUpdating || !newPassword}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-500 cursor-pointer shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  >
+                    <Lock size={13} />
+                    <span>{passwordUpdating ? 'Updating Password...' : 'Update Admin Password'}</span>
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
       </main>
